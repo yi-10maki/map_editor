@@ -10,8 +10,8 @@ const App: React.FC = () => {
       <Container style={{ height: '600px' }} fluid >
         <Row className="h-100">
           <Tool_bar />
-          <Col xs={9} md={9} className="bg-warning text-white p-1">マップ</Col>
-          <Col xs={2} md={2} className="bg-danger text-white p-1">左</Col>
+          <Col xs={9} md={9} className="bg-warning text-white p-1">Editor</Col>
+          <Col xs={2} md={2} className="bg-danger text-white p-1">Property</Col>
         </Row>
       </Container>
     </div>

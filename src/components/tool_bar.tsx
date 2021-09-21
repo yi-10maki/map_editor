@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./tool_bar.css"
 
 
+
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット:マップチップを表示・選択する**/
 const Tool_bar: React.FC = () => {

@@ -15,21 +15,28 @@ const range = (min:number, max:number, step = 1) => {
 /** GetCsvDataでcsvファイルを取得 */
 const getArrayFromCsv = ( dataPath: string ) => {
   var request = new XMLHttpRequest();
-  request.open('GET', dataPath, false);
+  request.open('GET', dataPath, true);
+  request.onload = function(e){
+    if (this.readyState === 4 && this.status === 200) {
+      console.log(request.response);
+    }else{
+      console.error(request.statusText);
+    }
+  }
   try {
     request.send();
   } catch (err) {
     console.log(err)
   }
-  console.log(request.responseText);
   return request.responseText;
 }
+
 
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット**/
 const Maptip_pallet: React.FC = () => {
-  {/** GetCsvDataでcsvファイルの情報を配列で取得 */}
-  const data:string[] = getArrayFromCsv("TipList.csv");
+  {/** GetCsvDataでcsvファイルの情報をひとまず文字列で取得 */}
+  const data:string = getArrayFromCsv("./TipList.csv");
 
   return (
     <div className="App">

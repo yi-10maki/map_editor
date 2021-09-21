@@ -6,7 +6,7 @@ const App: React.FC = () => {
     <div>
       <Maptip_pallet />
     </div>
-  )
+  );
 }
 
 export default App;

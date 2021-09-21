@@ -17,7 +17,7 @@ const Maptip_pallet: React.FC = () => {
   return (
     <div className="App">
       <div
-        style={{ position: "relative", overflow: "hidden", border: "solid" }}
+        style={{ position: "relative", overflow: "hidden", border: "solid", height: "80px"}}
       >
         {/** ScrollContainer でドラッグできる範囲を括ります */}
         <ScrollContainer ignoreElements={"#not-work-drag"}>

@@ -23,7 +23,7 @@
     //追加分
     "noImplicitReturns": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "baseUrl": "src"
     //
   },

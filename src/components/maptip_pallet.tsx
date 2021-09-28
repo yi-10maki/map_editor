@@ -9,6 +9,7 @@ function mapCSVToArray(csv: string): string[] {
   return csv.split(',');
 }
 
+
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット:マップチップを表示・選択する**/
 const Maptip_pallet: React.FC = () => {

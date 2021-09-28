@@ -10,14 +10,6 @@ function mapCSVToArray(csv: string): string[] {
   return csv.split(',');
 }
 
-function fetchText(){
-  fetch(`${process.env.PUBLIC_URL}/TipList.txt`)
-  .then(response => {response.text()
-  })
-  .then(text => { 
-  });
-} 
-
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット:マップチップを表示・選択する**/
 const Maptip_pallet: React.FC = () => {

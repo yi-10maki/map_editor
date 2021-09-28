@@ -35,12 +35,8 @@ async function getData() {
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット:マップチップを表示・選択する**/
 const Maptip_pallet: React.FC = () => {
-  //const img_names: string[] = mapCSVToArray("maptip1.png,maptip2.png,maptip3.png");
-  var data_promise: any = getData();
-  const img_names : string[] = [];
-  data_promise;
-  const image_edge_length : string="48";
-
+  const img_names: string[] = mapCSVToArray("maptip1.png,maptip2.png,maptip3.png");
+  
   return (
     <div className="App">
       <div
@@ -51,9 +47,7 @@ const Maptip_pallet: React.FC = () => {
           <div style={{ display: "flex" }}>
             {/** 0から100までのマップを表示*/}
             {img_names.map((img_name) => (
-              <Button className="m-1">
-                <img src={`${process.env.PUBLIC_URL}/maptip/`+img_name} width={image_edge_length} height={image_edge_length} />
-              </Button>
+              <Maptip id=1 />
             ))}
           </div>
         </ScrollContainer>

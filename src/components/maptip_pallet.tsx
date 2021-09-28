@@ -2,6 +2,7 @@ import React from "react";
 //import { Button } from "react-bootstrap";
 import Maptip from "./maptip";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./maptip_pallet.css"
 import ScrollContainer from "react-indiana-drag-scroll";
 
 
@@ -49,7 +50,6 @@ const Maptip_pallet: React.FC = () => {
             ))}
           </div>
         </ScrollContainer>
-        {data}
       </div>
     </div>
   )

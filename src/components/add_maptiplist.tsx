@@ -10,15 +10,15 @@ import { useDropzone } from "react-dropzone";
 
 
 function Drop_MapTipList(props: any) {
-	const accept = "*.txt";
+//	const accept = "*.txt";
 	const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file: File) => {
 			const reader = new FileReader()
 			reader.onabort = () => console.log('file reading was aborted')
       reader.onerror = () => console.log('file reading has failed')
-      reader.onload = () => {
+      reader.readAsText(file)
+			reader.onload = () => {
       // Do whatever you want with the file contents
-			  reader.readAsText(file)
         let result: string = reader.result as string
         console.log(result)
 			}
@@ -26,7 +26,7 @@ function Drop_MapTipList(props: any) {
   }, [])
 
 
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({accept, onDrop})
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: ".txt", onDrop})
 
   return (
     <div {...getRootProps()}>

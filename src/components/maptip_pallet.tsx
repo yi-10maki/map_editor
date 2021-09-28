@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./maptip_pallet.css"
 import ScrollContainer from "react-indiana-drag-scroll";
 
 /** min から max までの数字の入った配列を生成する関数 */
@@ -15,7 +16,7 @@ function fetchText(){
   fetch(`${process.env.PUBLIC_URL}/TipList.txt`)
   .then(response => {response.text()
   })
-  .then(text => { alert("aaaaaaa")
+  .then(text => { 
   });
 } 
 

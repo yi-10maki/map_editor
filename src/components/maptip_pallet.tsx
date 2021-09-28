@@ -1,15 +1,13 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+//import { Button } from "react-bootstrap";
+import Maptip from "./maptip";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./maptip_pallet.css"
 import ScrollContainer from "react-indiana-drag-scroll";
 
-/** min から max までの数字の入った配列を生成する関数 */
-const range = (min:number, max:number, step = 1) => {
-  return Array.from(
-    { length: (max - min + step) / step },
-    (v, k) => min + k * step
-  )
+
+function mapCSVToArray(csv: string): string[] {
+  return csv.split(',');
 }
 
 function fetchText(){
@@ -23,10 +21,8 @@ function fetchText(){
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット:マップチップを表示・選択する**/
 const Maptip_pallet: React.FC = () => {
-  let data = fetchText(); 
-
-  const x: string[] = ["./csv", "josuehu"];
-  const y: string = "aaaa" + x;
+  const img_names: string[] = mapCSVToArray("maptip1.png,maptip2.png,maptip3.png");
+  
   return (
     <div className="App">
       <div
@@ -36,15 +32,13 @@ const Maptip_pallet: React.FC = () => {
         <ScrollContainer ignoreElements={"#not-work-drag"}>
           <div style={{ display: "flex" }}>
             {/** 0から100までのマップを表示*/}
-            {range(0, 100).map((i) => ( //0からcsvのリストのサイズまでにする
-              <Button style={{ margin: "1em .25em" }}>{i}</Button> //imgに変えたい
+            {img_names.map((img_name:string,id:number) => (
+              <Maptip id={id} img_name={img_name} image_edge_length={"48"}/>
             ))}
           </div>
         </ScrollContainer>
         
       </div>
-      <p className="csv"></p>
-      <p>data{y}{data}</p>
     </div>
   )
 }

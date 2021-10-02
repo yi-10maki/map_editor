@@ -23,16 +23,16 @@ const Maptip: React.FC<MaptipProps> = ({
   const [id] = useState<number>(prop_id);
   const [img_name] = useState<string>(prop_img_name);
   const [image_edge_length] = useState<string>(prop_image_edge_length);
-  //const [selected,setSelected] = useState<boolean>(prop_selected);
+  //const [ selected,setSelected] = useState<boolean>(prop_selected);
 
   const handleClick = () => {
     propHandleClick(id);
-    //setSelected(prop_selected);
+    //setSelected(true);
   };
 
   if (prop_selected) {
     return (
-      <Button className="m-1 bg-secondary">
+      <Button className="m-1 bg-secondary" onClick={handleClick}>
         <img
           src={`${process.env.PUBLIC_URL}/maptip/` + img_name}
           width={image_edge_length}

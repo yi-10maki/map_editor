@@ -6,12 +6,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./add_maptiplist.css"
 import { useDropzone } from "react-dropzone";
 
-type Props = {
-  Add_MapTipList: (set_file_name: () => string) => ReactElement;
-  Drop_mapTipList: (set_file_name: () => string) => void;
+type DropProps = {
+  set_file_name: (name: string) => void;
 }
 
-const Drop_MapTipList: React.FC<Props> = (set_file_name) => {
+type AddProps = {
+  set_file_name: (name: string) => void
+}
+
+const Drop_MapTipList: React.FC<DropProps> = (props) => {
 	const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file: File) => {
       const reader = new FileReader()
@@ -22,13 +25,13 @@ const Drop_MapTipList: React.FC<Props> = (set_file_name) => {
       // Do whatever you want with the file contents
         let result: string = reader.result as string
         console.log(result)
-        set_file_name(result)
+        props.set_file_name(result)
 			}
 		})
   }, [])
 
 
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: ".txt", onDrop})
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: ".csv", onDrop})
 
   return (
     <div {...getRootProps()}>
@@ -42,7 +45,7 @@ const Drop_MapTipList: React.FC<Props> = (set_file_name) => {
   )
 }
 
-const Add_MapTipList: React.FC<Props> = (set_file_name) => {
+const Add_MapTipList: React.FC<AddProps> = (props) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -62,7 +65,9 @@ const Add_MapTipList: React.FC<Props> = (set_file_name) => {
           <Modal.Title>Modal title</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Drop_MapTipList set_file_name = {set_file_name}/>
+          <Drop_MapTipList
+            set_file_name = {props.set_file_name}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

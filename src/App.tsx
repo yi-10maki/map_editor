@@ -5,11 +5,11 @@ import Add_MapTipList from "./components/add_maptiplist"
 import {Container, Row, Col} from 'react-bootstrap';
 
 const App: React.FC = () => {
-  const [maptip_file, set_file_name] = useState<string>("No_data")
+  const [maptip_file, set_file_name] = useState<string>("")
   console.log(maptip_file)
   return(
     <div>
-      <Maptip_pallet file_name = "hoge" />
+      <Maptip_pallet file_name = {maptip_file} />
       <Container style={{ height: String(window.innerHeight-80)+"px" }} fluid >
         <Row className="h-100">
           <Tool_bar />

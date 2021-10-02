@@ -4,7 +4,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./maptip_pallet.css"
 import ScrollContainer from "react-indiana-drag-scroll";
 
-type Props = {file_name: string}
+type Props = {
+  file_name: string
+}
 
 function mapCSVToArray(csv: string): string[] {
   return csv.split(',');
@@ -12,7 +14,7 @@ function mapCSVToArray(csv: string): string[] {
 
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット**/
-const Maptip_pallet: React.FC<Props> = ({file_name: string}) => {
+const Maptip_pallet: React.FC<Props> = ({file_name}) => {
   const img_names: string[] = mapCSVToArray(file_name);
 
   return (

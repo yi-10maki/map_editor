@@ -16,16 +16,16 @@ function mapCSVToArray(csv: string): string[] {
  * マップパチップパレット:マップチップを表示・選択する**/
 const Maptip_pallet: React.FC = () => {
   const img_names: string[] = mapCSVToArray("maptip1.png,maptip2.png,maptip3.png");
-  const [ selecting_maptip_id, setSelectingMaptipId]=useState<number>(-1);//選んでいるマップチップの番号
+  //const [ selecting_maptip_id, setSelectingMaptipId]=useState<number>(-1);//選んでいるマップチップの番号
   const [ sel, setSel]=useState<boolean[]>(Array.from(Array(img_names.length), () => false));//選んでいるマップチップの番号だけtrueで後がfalseになっている配列。かなり力技だから良くない
 
   
   const handleClick = ( child_id:number) => {//マップチップが選択されたときに呼び出される関数
-    setSelectingMaptipId(child_id);
+    //setSelectingMaptipId(child_id);
     /*if(0<=selecting_maptip_id && selecting_maptip_id <img_names.length){
       setSel([...sel, true]);
     }*/
-    setSel(Array.from(Array(img_names.length), (v,k) => k==selecting_maptip_id));
+    setSel(Array.from(Array(img_names.length), (v,k) => k==child_id));
   }
 
   return (

@@ -22,9 +22,6 @@ const Maptip_pallet: React.FC = () => {
   
   const handleClick = ( child_id:number) => {//マップチップが選択されたときに呼び出される関数
     //setSelectingMaptipId(child_id);
-    /*if(0<=selecting_maptip_id && selecting_maptip_id <img_names.length){
-      setSel([...sel, true]);
-    }*/
     setSel(Array.from(Array(img_names.length), (v,k) => k==child_id));
   }
 

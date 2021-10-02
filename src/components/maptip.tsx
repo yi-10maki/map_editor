@@ -15,14 +15,14 @@ class Maptip extends React.Component<{id:number, img_name:string, image_edge_len
       image_edge_length : props.image_edge_length,
     };
   }
-  
+
   render(){
     return (
       <Button className="m-1">
-        <img 
-          src={`${process.env.PUBLIC_URL}/maptip/`+this.state.img_name} 
-          width={this.state.image_edge_length} 
-          height={this.state.image_edge_length} 
+        <img
+          src={`${process.env.PUBLIC_URL}/maptip/`+this.state.img_name}
+          width={this.state.image_edge_length}
+          height={this.state.image_edge_length}
         />
       </Button>
     )

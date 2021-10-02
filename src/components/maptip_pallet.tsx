@@ -1,40 +1,19 @@
 import React from "react";
-//import { Button } from "react-bootstrap";
 import Maptip from "./maptip";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./maptip_pallet.css"
 import ScrollContainer from "react-indiana-drag-scroll";
 
+type Props = {file_name: string}
 
 function mapCSVToArray(csv: string): string[] {
   return csv.split(',');
 }
 
-
-/** GetCsvDataでcsvファイルを取得 */
-const getArrayFromCsv = ( dataPath: string ) => {
-  var request = new XMLHttpRequest();
-  request.open('GET', dataPath, true);
-  request.onload = function(e){
-    if (this.readyState === 4 && this.status === 200) {
-      console.log(request.response);
-    }else{
-      console.error(request.statusText);
-    }
-  }
-  try {
-    request.send();
-  } catch (err) {
-    console.log(err)
-  }
-  return request.responseText;
-}
-
-
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット**/
-const Maptip_pallet: React.FC = () => {
-  const img_names: string[] = mapCSVToArray("maptip1.png,maptip2.png,maptip3.png");
+const Maptip_pallet: React.FC<Props> = ({file_name: string}) => {
+  const img_names: string[] = mapCSVToArray(file_name);
 
   return (
     <div className="App">

@@ -1,20 +1,24 @@
 import React from "react";
-//import { Button } from "react-bootstrap";
 import Maptip from "./maptip";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./maptip_pallet.css"
 import ScrollContainer from "react-indiana-drag-scroll";
 
+type Props = {
+  img_name: string[]
+}
 
+  /**
 function mapCSVToArray(csv: string): string[] {
   return csv.split(',');
 }
+  */
 
 /**関数名及びオブジェクト名は先頭大文字で
- * マップパチップパレット:マップチップを表示・選択する**/
-const Maptip_pallet: React.FC = () => {
-  const img_names: string[] = mapCSVToArray("maptip1.png,maptip2.png,maptip3.png");
-  
+ * マップパチップパレット**/
+const Maptip_pallet: React.FC<Props> = ({img_name}) => {
+  /**  const img_names: string[] = mapCSVToArray(file_name); */
+
   return (
     <div className="App">
       <div
@@ -24,12 +28,11 @@ const Maptip_pallet: React.FC = () => {
         <ScrollContainer ignoreElements={"#not-work-drag"}>
           <div style={{ display: "flex" }}>
             {/** 0から100までのマップを表示*/}
-            {img_names.map((img_name:string,id:number) => (
+            {img_name.map((img_name:string,id:number) => (
               <Maptip id={id} img_name={img_name} image_edge_length={"48"}/>
             ))}
           </div>
         </ScrollContainer>
-        
       </div>
     </div>
   )

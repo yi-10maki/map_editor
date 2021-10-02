@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 //import { Button } from "react-bootstrap";
 import Maptip from "./maptip";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -11,11 +11,19 @@ function mapCSVToArray(csv: string): string[] {
 }
 
 
+
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット:マップチップを表示・選択する**/
 const Maptip_pallet: React.FC = () => {
   const img_names: string[] = mapCSVToArray("maptip1.png,maptip2.png,maptip3.png");
+  const [ selecting_maptip_id, setSelectingMaptipId]=useState<number>(-1);
+  const [ sel, setSel]=useState<boolean[]>([]);
   
+  const handleClick = ( child_id:number) => {
+    setSel(Array.from(Array(3), (v,k) => k==selecting_maptip_id));
+    setSelectingMaptipId(child_id);
+  }
+
   return (
     <div className="App">
       <div
@@ -24,9 +32,10 @@ const Maptip_pallet: React.FC = () => {
         {/** ScrollContainer でドラッグできる範囲を括ります */}
         <ScrollContainer ignoreElements={"#not-work-drag"}>
           <div style={{ display: "flex" }}>
+            <button>{sel[1]}</button>
             {/** 0から100までのマップを表示*/}
             {img_names.map((img_name:string,id:number) => (
-              <Maptip id={id} img_name={img_name} image_edge_length={"48"}/>
+              <Maptip prop_id={id} prop_img_name={img_name} prop_image_edge_length={"48"} prop_selected={sel[id]} propHandleClick={handleClick} />
             ))}
           </div>
         </ScrollContainer>

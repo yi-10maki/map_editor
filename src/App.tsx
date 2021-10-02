@@ -1,6 +1,7 @@
 import React from "react";
 import Maptip_pallet from "./components/maptip_pallet";
 import Tool_bar from "./components/tool_bar";
+import Add_MapTipList from "./components/add_maptiplist"
 import {Container, Row, Col} from 'react-bootstrap';
 
 const App: React.FC = () => {
@@ -11,7 +12,9 @@ const App: React.FC = () => {
         <Row className="h-100">
           <Tool_bar />
           <Col xs={9} md={9} className="bg-warning text-white p-1">Editor</Col>
-          <Col xs={2} md={2} className="bg-danger text-white p-1">Property</Col>
+          <Col xs={2} md={2} className="bg-danger text-white p-1">
+            <Add_MapTipList />
+          </Col>
         </Row>
       </Container>
     </div>

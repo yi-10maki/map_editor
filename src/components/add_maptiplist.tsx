@@ -6,15 +6,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./add_maptiplist.css"
 import { useDropzone } from "react-dropzone";
 
-type DropProps = {
+type Props = {
   set_file_name: (name: string) => void;
 }
 
-type AddProps = {
-  set_file_name: (name: string) => void
-}
 
-const Drop_MapTipList: React.FC<DropProps> = (props) => {
+const Drop_MapTipList: React.FC<Props> = (props) => {
 	const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file: File) => {
       const reader = new FileReader()
@@ -45,7 +42,7 @@ const Drop_MapTipList: React.FC<DropProps> = (props) => {
   )
 }
 
-const Add_MapTipList: React.FC<AddProps> = (props) => {
+const Add_MapTipList: React.FC<Props> = (props) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);

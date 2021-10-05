@@ -1,10 +1,52 @@
 import React, {useEffect, useRef} from "react";
+//import CanvasTip from "./canvas_tip";
 
 {/*
   canvasを用いてエディタの描画部分を作成する
-
-
 */}
+
+const Map_Canvas: React.FC = () => {
+  const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
+
+  // CanvasオブジェクトのgetContext()は、キャンパスに描画するためのコンテキスト(CanvasRenderingContext2Dオブジェクトなど)を取得するメソッド
+  // 引数にコンテキストの種類を指定する　二次元グラフィックを描画するための2d、三次元グラフィックスを描画するためのwebglが主な引数
+  const getContext = (): CanvasRenderingContext2D => { 
+    const canvas: any = canvasRef.current;
+
+    return canvas.getContext('2d');
+  };
+
+  // useEffect: 副作用を有する可能性のある命令型のコードを受け付ける
+  // 副作用をReactのrenderフェーズで行うとバグとか非整合が起こるのでこれ使う
+  // 
+  useEffect(() => {
+    const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
+    //ctx.fillRect(0,0, 10, 500); // 座標(x, y) を始点とし大きさ (width, height) の領域を、(訳注: 現在の塗りつぶしスタイルを用いて) 塗りつぶす
+    // 変数 i,jを定義する
+    let i: number, j: number;
+    // x 方向にi=0～14まで15マスを描画する
+    for (i = 0; i < 50; i++) {
+      // y 方向にy=0～14まで15マスを描画する
+      for (j = 0; j < 15; j++) {
+        ctx.beginPath();
+        // i の値によって r(赤)の輝度を変化させる
+        // toString(10)で、文字列に変換
+        //var red = (i * 18).toString(10); 
+        ctx.fillStyle = 'rgb(200,200,200)';
+        // i,j を座標に変換
+        ctx.rect(i * 40, j * 40, 39, 39);
+        ctx.fill(); // 色を塗る
+      }
+    }
+    ctx.save(); // Saves the current drawing style state using a stack so you can revert any change you make to it using restore().
+  })
+
+  return (
+    
+    <canvas className="canvas" width="1600" height="800" ref={canvasRef} />
+    
+  );
+
 
 {/*
 let canvas_mousedown_flg = 0;   // マウスダウンフラグ
@@ -339,47 +381,7 @@ function craetePaletteArea() {
   }  
 */}
 
-const Map_Canvas: React.FC = () => {
-  const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
 
-  // CanvasオブジェクトのgetContext()は、キャンパスに描画するためのコンテキスト(CanvasRenderingContext2Dオブジェクトなど)を取得するメソッド
-  // 引数にコンテキストの種類を指定する　二次元グラフィックを描画するための2d、三次元グラフィックスを描画するためのwebglが主な引数
-  const getContext = (): CanvasRenderingContext2D => { 
-    const canvas: any = canvasRef.current;
-
-    return canvas.getContext('2d');
-  };
-
-  // useEffect: 副作用を有する可能性のある命令型のコードを受け付ける
-  // 副作用をReactのrenderフェーズで行うとバグとか非整合が起こるのでこれ使う
-  // 
-  useEffect(() => {
-    const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
-    //ctx.fillRect(0,0, 10, 500); // 座標(x, y) を始点とし大きさ (width, height) の領域を、(訳注: 現在の塗りつぶしスタイルを用いて) 塗りつぶす
-    // 変数 i,jを定義する
-    let i: number, j: number;
-    // x 方向にi=0～14まで15マスを描画する
-    for (i = 0; i < 15; i++) {
-      // y 方向にy=0～14まで15マスを描画する
-      for (j = 0; j < 15; j++) {
-        ctx.beginPath();
-        // i の値によって r(赤)の輝度を変化させる
-        // toString(10)で、文字列に変換
-        //var red = (i * 18).toString(10); 
-        ctx.fillStyle = 'rgb(200,200,200)';
-        // i,j を座標に変換
-        ctx.rect(i * 40, j * 40, 39, 39);
-        ctx.fill(); // 色を塗る
-      }
-    }
-    ctx.save(); // Saves the current drawing style state using a stack so you can revert any change you make to it using restore().
-  })
-
-  return (
-    
-    <canvas className="canvas" width="1000" height="800" ref={canvasRef} />
-    
-  );
   {/*
   return(
 

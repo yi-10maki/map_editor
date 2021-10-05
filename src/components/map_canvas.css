@@ -1,0 +1,20 @@
+#PaletteArea table{
+    margin: 12px 8px 0 18px;
+    border-collapse: collapse;
+  }
+   
+  #PaletteArea table td{
+    padding:1px;
+    border:0px;
+  }
+   
+  #CanvasArea table{
+    margin: 12px 8px 0 18px;  
+    border: 3px solid #1e90ff;  
+    border-collapse: collapse;
+  }
+   
+  #CanvasArea table td{
+    padding:0px;
+    border:1px dotted #1e90ff;
+  }

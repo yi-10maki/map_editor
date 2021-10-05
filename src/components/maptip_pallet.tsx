@@ -11,10 +11,12 @@ type Props = {
 
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット:マップチップを表示・選択する**/
-const Maptip_pallet: React.FC = () => {
+const Maptip_pallet: React.FC<Props> = ({
+  img_name,
+}) => {
   
   //const [ selecting_maptip_id, setSelectingMaptipId]=useState<number>(-1);//選んでいるマップチップの番号
-  const [ sel, setSel]=useState<boolean[]>(Array.from(Array(img_names.length), () => false));//選んでいるマップチップの番号だけtrueで後がfalseになっている配列。かなり力技だから良くない
+  const [ sel, setSel]=useState<boolean[]>(Array.from(Array(img_name.length), () => false));//選んでいるマップチップの番号だけtrueで後がfalseになっている配列。かなり力技だから良くない
 
   
   const handleClick = ( child_id:number) => {//マップチップが選択されたときに呼び出される関数
@@ -22,7 +24,7 @@ const Maptip_pallet: React.FC = () => {
     /*if(0<=selecting_maptip_id && selecting_maptip_id <img_names.length){
       setSel([...sel, true]);
     }*/
-    setSel(Array.from(Array(img_names.length), (v,k) => k==child_id));
+    setSel(Array.from(Array(img_name.length), (v,k) => k==child_id));
   }
 
   return (

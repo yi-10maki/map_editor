@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import {useCallback} from "react"
+//import { useMemo } from "react";
+import { useCallback } from "react"
 import "react-bootstrap";
 import { Button, Modal } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -35,8 +36,8 @@ const Drop_MapTipList: React.FC<Props> = (props) => {
       <input {...getInputProps()} />
       {
         isDragActive ?
-          <p>Drop the files here ...</p> :
-          <p>Drag 'n' drop some files here, or click to select files</p>
+          <p>ファイルをドロップ</p> :
+          <p>ファイルをここにドラッグ＆ドロップする、またはここをクリックしてファイルを開く</p>
       }
     </div>
   )
@@ -50,7 +51,7 @@ const Add_MapTipList: React.FC<Props> = (props) => {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Add MapTipList
+        マップチップリストの追加
       </Button>
       <Modal
         show={show}
@@ -59,18 +60,20 @@ const Add_MapTipList: React.FC<Props> = (props) => {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
+          <Modal.Title>マップチップリストの追加</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Drop_MapTipList
             set_file_name = {props.set_file_name}
           />
         </Modal.Body>
+        {/*
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            閉じる
           </Button>
         </Modal.Footer>
+        */}
       </Modal>
     </>
   )

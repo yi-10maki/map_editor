@@ -6,8 +6,8 @@ import React, {useEffect, useRef} from "react";
   canvasを用いてエディタの描画部分を作成する
 */}
 
-const canvas_size_x: number = 1400;
-const canvas_size_y: number = 850;
+const canvas_size_x: number = 2000;
+const canvas_size_y: number = 1000;
 
 const Map_Canvas: React.FC = () => {
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
@@ -29,6 +29,8 @@ const Map_Canvas: React.FC = () => {
     // 変数 i,jを定義する
     let i: number, j: number;
     ctx.clearRect(0, 0, canvas_size_x, canvas_size_y);//プログラム更新時に一旦全体をクリアする
+    let img = new Image();
+    img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`
     // x 方向にi=0～14まで15マスを描画する
     for (i = 0; i < 50; i++) {
       // y 方向にy=0～14まで15マスを描画する
@@ -37,10 +39,11 @@ const Map_Canvas: React.FC = () => {
         // i の値によって r(赤)の輝度を変化させる
         // toString(10)で、文字列に変換
         //var red = (i * 18).toString(10); 
-        ctx.fillStyle = 'rgb(200,200,200)';
+        //ctx.fillStyle = 'rgb(200,200,200)';
         // i,j を座標に変換
-        ctx.rect(i * 40, j * 40, 39, 39);
-        ctx.fill(); // 色を塗る
+        //ctx.rect(i * 40, j * 40, 39, 39);
+        //ctx.fill(); // 色を塗る
+        ctx.drawImage(img, i*50, j*50, 50, 50);
       }
     }
     ctx.save(); // Saves the current drawing style state using a stack so you can revert any change you make to it using restore().

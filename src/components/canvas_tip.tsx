@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 //CanvasTipのデータ
-//x,y座標 
+//x,y座標
 type CanvastipProps = {
   prop_id: number;//ID番号
   prop_img_name: string;//選択しているマップチップの名称

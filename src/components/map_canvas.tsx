@@ -20,7 +20,7 @@ const Map_Canvas: React.FC = () => {
 
   // CanvasオブジェクトのgetContext()は、キャンパスに描画するためのコンテキスト(CanvasRenderingContext2Dオブジェクトなど)を取得するメソッド
   // 引数にコンテキストの種類を指定する　二次元グラフィックを描画するための2d、三次元グラフィックスを描画するためのwebglが主な引数
-  const getContext = (): CanvasRenderingContext2D => { 
+  const getContext = (): CanvasRenderingContext2D => {
     const canvas: any = canvasRef.current;
     return canvas.getContext('2d');
   };
@@ -63,7 +63,7 @@ const Map_Canvas: React.FC = () => {
 
   // useEffect: 副作用を有する可能性のある命令型のコードを受け付ける
   // 副作用をReactのrenderフェーズで行うとバグとか非整合が起こるのでこれ使う
-  // 
+  //
   useEffect(() => {
     const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
     //ctx.fillRect(0,0, 10, 500); // 座標(x, y) を始点とし大きさ (width, height) の領域を、(訳注: 現在の塗りつぶしスタイルを用いて) 塗りつぶす
@@ -80,7 +80,7 @@ const Map_Canvas: React.FC = () => {
         ctx.beginPath();
         // i の値によって r(赤)の輝度を変化させる
         // toString(10)で、文字列に変換
-        //var red = (i * 18).toString(10); 
+        //var red = (i * 18).toString(10);
         //ctx.fillStyle = 'rgb(200,200,200)';
         // i,j を座標に変換
         //ctx.rect(i * 40, j * 40, 39, 39);
@@ -92,17 +92,17 @@ const Map_Canvas: React.FC = () => {
   })
 
   return (
-    
-    <canvas 
-      className="MapCanvas" 
-      width={canvas_size_x} 
-      height={canvas_size_y} 
-      ref={canvasRef} 
+
+    <canvas
+      className="MapCanvas"
+      width={canvas_size_x}
+      height={canvas_size_y}
+      ref={canvasRef}
       onMouseDown={handleOnMouseDown} //マウスが押されたとき
       onMouseMove={handleCanvasClick} //マウスが動いているとき
       onMouseUp={handleOnMouseUp}     //マウスを離したとき
     />
-    
+
   );
 }
 

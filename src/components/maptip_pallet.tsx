@@ -1,31 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect,useState } from "react";
 import Maptip from "./maptip";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./maptip_pallet.css"
 import ScrollContainer from "react-indiana-drag-scroll";
 
 type Props = {
-  img_name: string[]
+  img_name: string[],
+  set_selecting_maptip_id: (maptip_id: number) => void;
 }
 
 
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット:マップチップを表示・選択する**/
-const Maptip_pallet: React.FC<Props> = ({
-  img_name,
-}) => {
-  
-  //const [ selecting_maptip_id, setSelectingMaptipId]=useState<number>(-1);//選んでいるマップチップの番号
-  const [sel, setSel]=useState<boolean[]>(Array.from(Array(img_name.length), () => false));//選んでいるマップチップの番号だけtrueで後がfalseになっている配列。かなり力技だから良くない
+const Maptip_pallet: React.FC<Props> = ({ img_name, set_selecting_maptip_id, }) => {
 
-  
+  //const [ selecting_maptip_id, setSelectingMaptipId]=useState<number>(-1);//選んでいるマップチップの番号
+  const [sel, setSel]=useState<boolean[]>(Array.from(Array(img_name.length), () => false));
+  //選んでいるマップチップの番号だけtrueで後がfalseになっている配列。かなり力技だから良くない
+
+
   const handleClick = (child_id:number) => {//マップチップが選択されたときに呼び出される関数
     //setSelectingMaptipId(child_id);
     /*if(0<=selecting_maptip_id && selecting_maptip_id <img_names.length){
       setSel([...sel, true]);
     }*/
     setSel(Array.from(Array(img_name.length), (v,k) => k==child_id));
-  }
+  };
+
+  useEffect(() => {
+    sel.forEach((e: boolean,index: number) => {
+      if(e){
+        set_selecting_maptip_id(index+1)
+      }
+    })},[sel])
 
   return (
     <div className="App">

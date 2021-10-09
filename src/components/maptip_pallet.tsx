@@ -35,7 +35,7 @@ const Maptip_pallet: React.FC<Props> = ({
         {/** ScrollContainer でドラッグできる範囲を括ります */}
         <ScrollContainer ignoreElements={"#not-work-drag"}>
           <div style={{ display: "flex" }}>
-            {/** 0から100までのマップを表示*/}
+            {/** 読み込んだリストにある画像をマップチップとして表示*/}
             {img_name.map((img_name:string,id:number) => (
               <Maptip prop_id={id} prop_img_name={img_name} prop_image_edge_length={"48"} prop_selected={sel[id]} propHandleClick={handleClick} key={id} />
 

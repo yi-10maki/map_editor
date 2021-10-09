@@ -27,6 +27,10 @@ const Maptip_pallet: React.FC<Props> = ({ img_name, set_selecting_maptip_id, }) 
     setSel(Array.from(Array(img_name.length), (v,k) => k==child_id));
   };
 
+  // selの値が更新されるかつ再レンダリングがかかったタイミングで実行
+  //    forEachでselの中でtrueのmaptipのidをApp.tsxのselecting_maptip_idにセットする
+  //    maptipは1ベース前提！！！！！！！！！！！！！
+  //    0ベースで作成するとバグるかも？
   useEffect(() => {
     sel.forEach((e: boolean,index: number) => {
       if(e){
@@ -44,8 +48,14 @@ const Maptip_pallet: React.FC<Props> = ({ img_name, set_selecting_maptip_id, }) 
           <div style={{ display: "flex" }}>
             {/** 0から100までのマップを表示*/}
             {img_name.map((img_name:string,id:number) => (
-              <Maptip prop_id={id} prop_img_name={img_name} prop_image_edge_length={"48"} prop_selected={sel[id]} propHandleClick={handleClick} key={id} />
-
+              <Maptip
+                prop_id={id}
+                prop_img_name={img_name}
+                prop_image_edge_length={"48"}
+                prop_selected={sel[id]}
+                propHandleClick={handleClick}
+                key={id}
+              />
             ))}
           </div>
         </ScrollContainer>

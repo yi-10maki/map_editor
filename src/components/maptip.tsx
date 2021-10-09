@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 /**関数名及びオブジェクト名は先頭大文字で
@@ -32,7 +32,7 @@ const Maptip: React.FC<MaptipProps> = ({
 
   if (prop_selected) {
     return (
-      <Button className="m-1 bg-secondary" onClick={handleClick}>
+      <Button className="m-1 bg-secondary" onMouseDown={handleClick}>
         <img
           src={`${process.env.PUBLIC_URL}/maptip/` + img_name}
           width={image_edge_length}
@@ -43,7 +43,7 @@ const Maptip: React.FC<MaptipProps> = ({
     );
   } else {
     return (
-      <Button className="m-1 bg-light" onClick={handleClick}>
+      <Button className="m-1 bg-light" onMouseDown={handleClick}>
         <img
           src={`${process.env.PUBLIC_URL}/maptip/` + img_name}
           width={image_edge_length}

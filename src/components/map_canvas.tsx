@@ -1,9 +1,13 @@
 import React, {useEffect, useRef} from "react";
+//import "./map_canvas.css"
 //import CanvasTip from "./canvas_tip";
 
 {/*
   canvasを用いてエディタの描画部分を作成する
 */}
+
+const canvas_size_x: number = 1400;
+const canvas_size_y: number = 850;
 
 const Map_Canvas: React.FC = () => {
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
@@ -24,10 +28,11 @@ const Map_Canvas: React.FC = () => {
     //ctx.fillRect(0,0, 10, 500); // 座標(x, y) を始点とし大きさ (width, height) の領域を、(訳注: 現在の塗りつぶしスタイルを用いて) 塗りつぶす
     // 変数 i,jを定義する
     let i: number, j: number;
+    ctx.clearRect(0, 0, canvas_size_x, canvas_size_y);//プログラム更新時に一旦全体をクリアする
     // x 方向にi=0～14まで15マスを描画する
     for (i = 0; i < 50; i++) {
       // y 方向にy=0～14まで15マスを描画する
-      for (j = 0; j < 15; j++) {
+      for (j = 0; j < 20; j++) {
         ctx.beginPath();
         // i の値によって r(赤)の輝度を変化させる
         // toString(10)で、文字列に変換
@@ -43,7 +48,7 @@ const Map_Canvas: React.FC = () => {
 
   return (
     
-    <canvas className="canvas" width="1600" height="800" ref={canvasRef} />
+    <canvas className="MapCanvas" width={canvas_size_x} height={canvas_size_y} ref={canvasRef} />
     
   );
 

@@ -5,15 +5,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット:マップチップを表示・選択する**/
 
-type MaptipProps = {
-  prop_id: number;
-  prop_img_name: string;
-  prop_image_edge_length: string;
-  prop_selected: boolean;
+
+//CanvasTipのデータ
+//x,y座標 
+type CanvastipProps = {
+  prop_id: number;//ID番号
+  prop_img_name: string;//選択しているマップチップの名称
+  prop_image_edge_length: string;//多分いらない
+  prop_selected: boolean;//多分いらない
+  prop_and:string;
   propHandleClick: (id: number) => void;
 };
 
-const CanvasTip: React.FC<MaptipProps> = ({
+const CanvasTip: React.FC<CanvastipProps> = ({
   prop_id,
   prop_img_name,
   prop_image_edge_length,

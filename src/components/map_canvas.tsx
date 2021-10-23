@@ -9,6 +9,7 @@ import React, {useEffect, useRef} from "react";
 
 type Props = {
   maptip_id: number
+  canvas_size: number[]
 }
 
 // 可変にしたい（プロパティに入力した値を受け取る）
@@ -95,10 +96,6 @@ const Map_Canvas: React.FC<Props> = (props) => {
     ctx.save(); // Saves the current drawing style state using a stack so you can revert any change you make to it using restore().
   })
 
-  function handleKeyDown(e){
-    console.log(e.keycode)
-  }
-
   return (
 
     <canvas
@@ -109,7 +106,6 @@ const Map_Canvas: React.FC<Props> = (props) => {
       onMouseDown={handleOnMouseDown} //マウスが押されたとき
       onMouseMove={handleCanvasClick} //マウスが動いているとき
       onMouseUp={handleOnMouseUp}     //マウスを離したとき
-      onKeyDown={handleKeyDown}
     />
 
   );

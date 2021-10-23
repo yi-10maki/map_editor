@@ -7,11 +7,15 @@ import React, {useEffect, useRef} from "react";
   選択しているマップチップとツールによって描画を変える
 */}
 
+type Props = {
+  maptip_id: number
+}
+
 // 可変にしたい（プロパティに入力した値を受け取る）
 const canvas_size_x: number = 2000;
 const canvas_size_y: number = 1000;
 
-const Map_Canvas: React.FC = () => {
+const Map_Canvas: React.FC<Props> = (props) => {
 
   let isDrawing:boolean = false;// マウスが押されているかどうか
   let x: number = 0; // マウスのx座標の処理に使う
@@ -91,6 +95,10 @@ const Map_Canvas: React.FC = () => {
     ctx.save(); // Saves the current drawing style state using a stack so you can revert any change you make to it using restore().
   })
 
+  function handleKeyDown(e){
+    console.log(e.keycode)
+  }
+
   return (
 
     <canvas
@@ -101,6 +109,7 @@ const Map_Canvas: React.FC = () => {
       onMouseDown={handleOnMouseDown} //マウスが押されたとき
       onMouseMove={handleCanvasClick} //マウスが動いているとき
       onMouseUp={handleOnMouseUp}     //マウスを離したとき
+      onKeyDown={handleKeyDown}
     />
 
   );

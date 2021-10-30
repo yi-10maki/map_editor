@@ -27,7 +27,7 @@ const Maptip: React.FC<MaptipProps> = ({
 
   //マップチップがクリックされたときの処理
   const handleClick = () => {
-    propHandleClick(id);
+    propHandleClick(id - 1);
     //setSelected(true);
   };
 

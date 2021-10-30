@@ -10,22 +10,21 @@ import React, {useEffect, useRef, useCallback} from "react";
 */}
 
 // 可変にしたい（プロパティに入力した値を受け取る）
-const canvas_size_x: number = 2000;
-const canvas_size_y: number = 1000;
+const canvas_size_x: number = 4000; // default 1マス40px
+const canvas_size_y: number = 2400; //
+const maptip_edge_size: number = 40;
+let ratio: number = 1; // 拡大縮小比率
+let i: number, j: number; // for文用
+let isDrawing:boolean = false;// マウスが押されているかどうか
+let x: number = 0; // マウスのx座標の処理に使う
+let y: number = 0; // マウスのy座標の処理に使う
+let img = new Image(); // マップチップを保存
+img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ仮指定
 
-const Map_Canvas: React.FC = () => {
 
-  let isDrawing:boolean = false;// マウスが押されているかどうか
-  let x: number = 0; // マウスのx座標の処理に使う
-  let y: number = 0; // マウスのy座標の処理に使う
+const Map_Canvas: React.FC = () => {  
+  
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
-  let ratio: number = 1; // 拡大縮小比率
-  
-  let i: number, j: number; // for文用
-  
-  let img = new Image(); // マップチップを保存
-  img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ仮指定
-
   //const [convas_tip_x] = useState(0);
   //const [convas_tip_y] = useState(0);
   //const [map_ratio] = useState(0);
@@ -40,6 +39,12 @@ const Map_Canvas: React.FC = () => {
   const getContext = (): CanvasRenderingContext2D => {
     const canvas: any = canvasRef.current;
     return canvas.getContext('2d');
+  };
+
+  const resizeCanvas = () => {
+    const canvas: any = canvasRef.current;
+    canvas.width = canvas_size_x*ratio;
+    canvas.height = canvas_size_y*ratio;
   };
 
   // マウスを押したとき描画フラグをtrue
@@ -127,17 +132,48 @@ const Map_Canvas: React.FC = () => {
 */}
 
   // マウスの位置を受け取ってその位置のマップチップを変える
+  
+
+  // 拡大縮小用キー入力受け取り
+  // キャンバス部分を選択していなくてもキー入力だけで動作するため他の機能で使わなさそうなキーを使う
+  const enterFunction = useCallback((event) => {
+    if(event.keyCode === 191 && ratio < 2) {
+      ratio += 0.1;
+      drawMap();
+    } else if(event.keyCode === 226 && ratio > 0.41) {
+      ratio -= 0.1;
+      drawMap();
+    }
+  }, []);
+
+  // 拡大縮小後の再描画
+  function drawMap() {
+    resizeCanvas();
+    console.log(ratio);
+    const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
+    // 変数 i,jを定義する
+    ctx.clearRect(0, 0, canvas_size_x, canvas_size_y);//プログラム更新時に一旦全体をクリアする
+    // x 方向にi=0～14まで15マスを描画する
+    for (i = 0; i < 1000; i++) {
+      // y 方向にy=0～14まで15マスを描画する
+      for (j = 0; j < 500; j++) {
+        ctx.beginPath();
+        ctx.drawImage(img, i*maptip_edge_size*ratio, j*maptip_edge_size*ratio, maptip_edge_size*ratio, maptip_edge_size*ratio);
+      }
+    }
+        
+  }
+
   function handleMouseMove(e:any){
     if(isDrawing){
-      let rect = e.target.getBoundingClientRect();
-
+      let rect: any = e.target.getBoundingClientRect();
       // マス目に合わせる処理
       x = e.clientX - rect.left; // 
       y = e.clientY - rect.top;  // 
       let tmp:number;
-      tmp = x % (40*ratio);
+      tmp = x % (maptip_edge_size*ratio);
       x -= tmp;
-      tmp = y % (40*ratio);
+      tmp = y % (maptip_edge_size*ratio);
       y -= tmp;
       drawMapTip(x, y);
     }
@@ -148,34 +184,8 @@ const Map_Canvas: React.FC = () => {
     const ctx: CanvasRenderingContext2D = getContext();
     let img = new Image();
     img.src = `${process.env.PUBLIC_URL}/maptip/maptip2.png`
-    ctx.drawImage(img, cx, cy, 40*ratio, 40*ratio);
-  }
-
-  // 拡大縮小用キー入力受け取り
-  // キャンバス部分を選択していなくてもキー入力だけで動作するため他の機能で使わなさそうなキーを使う
-  const enterFunction = useCallback((event) => {
-    if(event.keyCode === 191) {
-      ratio += 0.1
-      drawMap()
-    } else if(event.keyCode === 226) {
-      ratio -= 0.1
-      drawMap()
-    }
-  }, []);
-
-  // 拡大縮小後の再描画
-  function drawMap() {
-    const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
-    // 変数 i,jを定義する
-    ctx.clearRect(0, 0, canvas_size_x, canvas_size_y);//プログラム更新時に一旦全体をクリアする
-    // x 方向にi=0～14まで15マスを描画する
-    for (i = 0; i < 50; i++) {
-      // y 方向にy=0～14まで15マスを描画する
-      for (j = 0; j < 25; j++) {
-        ctx.beginPath();
-        ctx.drawImage(img, i*40*ratio, j*40*ratio, 40*ratio, 40*ratio);
-      }
-    }
+    ctx.drawImage(img, cx, cy, maptip_edge_size*ratio, maptip_edge_size*ratio);
+    console.log(cx, cy, maptip_edge_size*ratio, maptip_edge_size*ratio)
   }
 
 
@@ -187,13 +197,14 @@ const Map_Canvas: React.FC = () => {
     const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
     ctx.clearRect(0, 0, canvas_size_x, canvas_size_y);//プログラム更新時に一旦全体をクリアする
     // x 方向にi=0～14まで15マスを描画する
-    for (i = 0; i < 50; i++) {
+    for (i = 0; i < 1000; i++) {
       // y 方向にy=0～14まで15マスを描画する
-      for (j = 0; j < 25; j++) {
+      for (j = 0; j < 500; j++) {
         ctx.beginPath();
-        ctx.drawImage(img, i*40*ratio, j*40*ratio, 40*ratio, 40*ratio);
+        ctx.drawImage(img, i*maptip_edge_size*ratio, j*maptip_edge_size*ratio, maptip_edge_size*ratio, maptip_edge_size*ratio);
       }
     }
+       
     ctx.save(); // Saves the current drawing style state using a stack so you can revert any change you make to it using restore().
   })
 

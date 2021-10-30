@@ -11,7 +11,12 @@ function mapCSVToArray(csv: string): string[] {
 }
 
 const App: React.FC = () => {
-  const [maptip_file, set_file_name] = useState<string[]>([])
+  // AppのState これらの値を保持している
+  //  maptip_file: 受け取ったマップチップのリスト add_maptiplistから受け取ってmaptip_palletで描画
+  //  selecting_maptip_id: 現在選択中のマップチップのid maptip_palletから受け取って色々使う 初期値は-1
+  const [maptip_file, set_file_name] = useState<string[]>([]);
+  const [selecting_maptip_id,set_selecting_maptip_id] = useState<number>(-1);
+  console.log(selecting_maptip_id);
   const [ canvas_height] = useState<number>(20)
   const [ canvas_width] = useState<number>(50)
 
@@ -36,9 +41,13 @@ const App: React.FC = () => {
     set_canvas_tip_data(temp)
   }
 
+
   return(
     <div>
-      <Maptip_pallet img_name = {maptip_file} />
+      <Maptip_pallet
+        img_name = {maptip_file}
+        set_selecting_maptip_id = {(maptip_id: number) => set_selecting_maptip_id(maptip_id)}
+      />
       <Container style={{ height: String(window.innerHeight-80)+"px" }} fluid >
         <Row className="h-100">
           <Tool_bar />

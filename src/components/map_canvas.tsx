@@ -117,6 +117,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   });
 
   return (
+
     <canvas
       className="MapCanvas"
       width={canvas_size_x}
@@ -126,6 +127,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       onMouseMove={handleCanvasClick} //マウスが動いているとき
       onMouseUp={handleOnMouseUp} //マウスを離したとき
     />
+
   );
 };
 

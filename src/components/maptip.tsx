@@ -82,7 +82,7 @@ class Maptip extends React.Component<
           </Button>
         );
       }
-      
+
 }
 
 */

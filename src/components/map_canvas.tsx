@@ -13,6 +13,8 @@ import React, {useEffect, useRef, useCallback} from "react";
 const canvas_size_x: number = 4000; // default 1マス40px
 const canvas_size_y: number = 2400; //
 const maptip_edge_size: number = 40;
+let grid_x_num = 100;
+let grid_y_num = 60;
 let ratio: number = 1; // 拡大縮小比率
 let i: number, j: number; // for文用
 let isDrawing:boolean = false;// マウスが押されているかどうか
@@ -70,9 +72,9 @@ const Map_Canvas: React.FC = () => {
     // 変数 i,jを定義する
     ctx.clearRect(0, 0, canvas_size_x, canvas_size_y);//プログラム更新時に一旦全体をクリアする
     // x 方向にi=0～14まで15マスを描画する
-    for (i = 0; i < 1000; i++) {
+    for (i = 0; i < grid_x_num; i++) {
       // y 方向にy=0～14まで15マスを描画する
-      for (j = 0; j < 500; j++) {
+      for (j = 0; j < grid_y_num; j++) {
         ctx.beginPath();
         ctx.drawImage(img, i*maptip_edge_size*ratio, j*maptip_edge_size*ratio, maptip_edge_size*ratio, maptip_edge_size*ratio);
       }
@@ -113,9 +115,9 @@ const Map_Canvas: React.FC = () => {
     const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
     ctx.clearRect(0, 0, canvas_size_x, canvas_size_y);//プログラム更新時に一旦全体をクリアする
     // x 方向にi=0～14まで15マスを描画する
-    for (i = 0; i < 1000; i++) {
+    for (i = 0; i < grid_x_num; i++) {
       // y 方向にy=0～14まで15マスを描画する
-      for (j = 0; j < 500; j++) {
+      for (j = 0; j < grid_y_num; j++) {
         ctx.beginPath();
         ctx.drawImage(img, i*maptip_edge_size*ratio, j*maptip_edge_size*ratio, maptip_edge_size*ratio, maptip_edge_size*ratio);
       }

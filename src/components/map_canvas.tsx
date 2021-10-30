@@ -25,14 +25,6 @@ img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ�
 const Map_Canvas: React.FC = () => {  
   
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
-  //const [convas_tip_x] = useState(0);
-  //const [convas_tip_y] = useState(0);
-  //const [map_ratio] = useState(0);
-
-
-  //let canvas = document.createElement('canvas');
-  //const mapCanvas: any = document.getElementById('MapCanvas') as HTMLCanvasElement;
-  //mapCanvas.addEventListener('keydown', zoomCanvas);
 
   // CanvasオブジェクトのgetContext()は、キャンパスに描画するためのコンテキスト(CanvasRenderingContext2Dオブジェクトなど)を取得するメソッド
   // 引数にコンテキストの種類を指定する　二次元グラフィックを描画するための2d、三次元グラフィックスを描画するためのwebglが主な引数
@@ -57,82 +49,6 @@ const Map_Canvas: React.FC = () => {
   function handleOnMouseUp(e:any){
     isDrawing = false;
   }
-
-  
-  {/*
-  function zoomCanvas(e:any){
-    console.log("keydown");
-    const ctx: CanvasRenderingContext2D = getContext();
-    const str:string = e.keyCode;
-    let rect = e.target.getBoundingClientRect();
-    x = e.clientX - rect.left;
-    y = e.clientY - rect.top;
-    if (str == 'KeyL'){
-      ratio = zoomChange(ratio, 0.1);
-      ctx.clearRect(0, 0, canvas_size_x, canvas_size_y);//プログラム更新時に一旦全体をクリアする
-      for (i = 0; i < 50; i++) {
-        // y 方向にy=0～14まで15マスを描画する
-        for (j = 0; j < 25; j++) {
-          ctx.beginPath();
-          ctx.drawImage(img, i*40*ratio, j*40*ratio, 40*ratio, 40*ratio);
-        }
-      }
-
-    } else if(str == 'KeyS'){
-      ratio = zoomChange(ratio, -0.1);
-      ctx.clearRect(0, 0, canvas_size_x, canvas_size_y);//プログラム更新時に一旦全体をクリアする
-      for (i = 0; i < 50; i++) {
-        // y 方向にy=0～14まで15マスを描画する
-        for (j = 0; j < 25; j++) {
-          ctx.beginPath();
-          ctx.drawImage(img, i*40*ratio, j*40*ratio, 40*ratio, 40*ratio);
-        }
-      }
-    }
-  }
-
-  window.addEventListener("load", function(){
-    console.log("hoge");
-  }, false)
-
-
-  function zoomChange(r: number, z: number){
-    if(r<=2 || r>0.5){
-      return r+z;
-    } else {
-      return r;
-    }
-  }
-*/}
-
-  {/*
-  function handleMouseWheel(e:any){
-    if(e.deltaY > 0 && ratio <= 2.0){
-      ratio += 0.1
-      drawMap()
-    } else if(e.deltaY < 0 && ratio >= 0.5){
-      ratio -= 0.1
-    }
-  }
- */}
-
-  
-  {/*
-  function handleKeyDown(e:any){
-    console.log("a")
-    if(e.keyCode == 'KeyZ' && ratio < 2.0) {
-      ratio += 0.1;
-      drawMap();
-    } else if(e.keyCode == 'KeyX' && ratio > 0.5) {
-      ratio -= 0.1;
-      drawMap();
-    }
-  }
-  onKeyDown={handleKeyDown}
-*/}
-
-  // マウスの位置を受け取ってその位置のマップチップを変える
-  
 
   // 拡大縮小用キー入力受け取り
   // キャンバス部分を選択していなくてもキー入力だけで動作するため他の機能で使わなさそうなキーを使う
@@ -168,8 +84,8 @@ const Map_Canvas: React.FC = () => {
     if(isDrawing){
       let rect: any = e.target.getBoundingClientRect();
       // マス目に合わせる処理
-      x = e.clientX - rect.left; // 
-      y = e.clientY - rect.top;  // 
+      x = e.clientX - rect.left;
+      y = e.clientY - rect.top;
       let tmp:number;
       tmp = x % (maptip_edge_size*ratio);
       x -= tmp;

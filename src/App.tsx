@@ -3,7 +3,8 @@ import Maptip_pallet from "./components/maptip_pallet";
 import Tool_bar from "./components/tool_bar";
 import Add_MapTipList from "./components/add_maptiplist"
 import Map_Canvas from "./components/map_canvas"
-import {Container, Row, Col, Button} from 'react-bootstrap';
+import Input_canvas_size from "./components/input_canvas_size"
+import {Container, Row, Col} from 'react-bootstrap';
 
 //let i:number; 
 //let j:number;
@@ -22,9 +23,11 @@ const App: React.FC = () => {
   // AppのState これらの値を保持している
   //  maptip_file: 受け取ったマップチップのリスト add_maptiplistから受け取ってmaptip_palletで描画
   //  selecting_maptip_id: 現在選択中のマップチップのid maptip_palletから受け取って色々使う 初期値は-1
+  //  canvas_size: エディタのマップのサイズ input_canvas_sizeから受け取って色々使う 初期値は縦50,横25
   const [maptip_file, set_file_name] = useState<string[]>([]);
   const [selecting_maptip_id,set_selecting_maptip_id] = useState<number>(-1);
-  console.log(selecting_maptip_id);
+  const [canvas_size, set_canvas_size] = useState<number[]>([50,25])
+  console.log(canvas_size);
 
   let [canvas_height_num] = useState<number>(60)
   let [canvas_width_num] = useState<number>(100)
@@ -61,13 +64,26 @@ const App: React.FC = () => {
         <Row className="h-100">
           <Tool_bar />
           <Col xs={9} md={9} className="bg-warning text-white p-1 overflow-scroll h-100">
-            <Map_Canvas propGetMapTip={handleGetMapTip} propClickCanvasTip={_handleClickCanvasTip}/>
+
+            <Map_Canvas
+              maptip_id = {selecting_maptip_id}
+              canvas_size = {canvas_size}
+              propGetMapTip={handleGetMapTip} 
+              propClickCanvasTip={_handleClickCanvasTip}
+              />
+
           </Col>
           <Col xs={2} md={2} className="bg-danger text-white p-1">
             <Add_MapTipList
               set_file_name = {(name: string) => set_file_name(mapCSVToArray(name))}
             />
+
+            <Input_canvas_size
+              size = {canvas_size}
+              set_canvas_size = {(canvas_size: number[]) => set_canvas_size(canvas_size)}
+
             <Button>{canvas_tip_data}</Button>
+              
           </Col>
         </Row>
       </Container>

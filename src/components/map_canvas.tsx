@@ -10,11 +10,12 @@ import React, {useEffect, useRef, useCallback} from "react";
 */}
 
 // 可変にしたい（プロパティに入力した値を受け取る）
+
+const grid_x_num: number = 100; // default 1マス40px
+const grid_y_num: number = 60; //
 const canvas_size_x: number = 4000; // default 1マス40px
 const canvas_size_y: number = 2400; //
 const maptip_edge_size: number = 40;
-let grid_x_num = 100;
-let grid_y_num = 60;
 let ratio: number = 1; // 拡大縮小比率
 let i: number, j: number; // for文用
 let isDrawing:boolean = false;// マウスが押されているかどうか
@@ -25,16 +26,17 @@ img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ�
 let now_maptip_edge_size: number = maptip_edge_size*ratio;
 
 type MapCanvasProps = {
+  maptip_id: number
+  canvas_size: number[]
   propGetMapTip: (h: number, w: number) => number;
   propClickCanvasTip: (h: number, w: number) => void;
 };
-
 
 const Map_Canvas: React.FC<MapCanvasProps> = ({
   propGetMapTip,
   propClickCanvasTip,
 }) => {
-  
+
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
 
   // CanvasオブジェクトのgetContext()は、キャンパスに描画するためのコンテキスト(CanvasRenderingContext2Dオブジェクトなど)を取得するメソッド

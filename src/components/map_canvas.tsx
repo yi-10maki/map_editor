@@ -9,7 +9,13 @@ import React, {useEffect, useRef, useCallback} from "react";
   Space+マウスホイールで拡大縮小を行える
 */}
 
+type Props = {
+  maptip_id: number
+  canvas_size: number[]
+}
+
 // 可変にしたい（プロパティに入力した値を受け取る）
+
 const grid_x_num: number = 100; // default 1マス40px
 const grid_y_num: number = 60; //
 const canvas_size_x: number = 4000; // default 1マス40px
@@ -34,7 +40,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   propGetMapTip,
   propClickCanvasTip,
 }) => {
-  
+
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
 
   // CanvasオブジェクトのgetContext()は、キャンパスに描画するためのコンテキスト(CanvasRenderingContext2Dオブジェクトなど)を取得するメソッド

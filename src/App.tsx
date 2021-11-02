@@ -25,13 +25,11 @@ const App: React.FC = () => {
   //  selecting_maptip_id: 現在選択中のマップチップのid maptip_palletから受け取って色々使う 初期値は-1
   //  canvas_size: エディタのマップのサイズ input_canvas_sizeから受け取って色々使う 初期値は縦50,横25
   const [maptip_file, set_file_name] = useState<string[]>([]);
-  const [selecting_maptip_id,set_selecting_maptip_id] = useState<number>(-1);
+  const [selecting_maptip_id, set_selecting_maptip_id] = useState<number>(-1);
   const [canvas_size, set_canvas_size] = useState<number[]>([60,100]);
   console.log(canvas_size);
 
-  let [canvas_height_num] = useState<number>(60);
-  let [canvas_width_num] = useState<number>(100);
-  let [canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( generate2DArray(canvas_width_num, canvas_height_num) );
+  let [canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( generate2DArray(canvas_size[0], canvas_size[1]) );
   //let temp: number[][] = generate2DArray(canvas_width_num, canvas_height_num)
 
   const handleGetMapTip = (h:number , w:number) => {//マップチップが選択されたときに呼び出される関数

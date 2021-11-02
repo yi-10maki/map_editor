@@ -29,12 +29,12 @@ const Maptip_pallet: React.FC<Props> = ({ img_name, set_selecting_maptip_id, }) 
 
   // selの値が更新されるかつ再レンダリングがかかったタイミングで実行
   //    forEachでselの中でtrueのmaptipのidをApp.tsxのselecting_maptip_idにセットする
-  //    maptipは1ベース前提！！！！！！！！！！！！！
-  //    0ベースで作成するとバグるかも？
+  //    maptipのファイル名は1ベース前提！！！！！！！！！！！！！
+  //    配列は0ベース
   useEffect(() => {
     sel.forEach((e: boolean,index: number) => {
       if(e){
-        set_selecting_maptip_id(index+1)
+        set_selecting_maptip_id(index)
       }
     })},[sel])
 

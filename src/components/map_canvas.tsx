@@ -11,10 +11,10 @@ import React, {useEffect, useRef, useCallback} from "react";
 
 // 可変にしたい（プロパティに入力した値を受け取る）
 
-const grid_x_num: number = 100; // default 1マス40px
-const grid_y_num: number = 60; //
-const canvas_size_x: number = 4000; // default 1マス40px
-const canvas_size_y: number = 2400; //
+let grid_x_num: number = 100; // default 1マス40px
+let grid_y_num: number = 60; //
+let canvas_size_x: number = 4000; // default 1マス40px
+let canvas_size_y: number = 2400; //
 const maptip_edge_size: number = 40;
 let ratio: number = 1; // 拡大縮小比率
 let i: number, j: number; // for文用
@@ -33,6 +33,8 @@ type MapCanvasProps = {
 };
 
 const Map_Canvas: React.FC<MapCanvasProps> = ({
+  maptip_id,
+  canvas_size,
   propGetMapTip,
   propClickCanvasTip,
 }) => {
@@ -86,7 +88,8 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     for (i = 0; i < grid_x_num; i++) {
       // y 方向にy=0～14まで15マスを描画する
       for (j = 0; j < grid_y_num; j++) {
-        img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(j, i) + 1}.png`
+        if (propGetMapTip(j, i) == -1) continue;
+        img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(j, i) + 1}.png`;
         ctx.beginPath();
         ctx.drawImage(img, i*now_maptip_edge_size, j*now_maptip_edge_size, now_maptip_edge_size, now_maptip_edge_size);
       }

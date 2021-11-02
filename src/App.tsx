@@ -4,7 +4,7 @@ import Tool_bar from "./components/tool_bar";
 import Add_MapTipList from "./components/add_maptiplist"
 import Map_Canvas from "./components/map_canvas"
 import Input_canvas_size from "./components/input_canvas_size"
-import {Container, Row, Col} from 'react-bootstrap';
+import {Container, Row, Col, Button} from 'react-bootstrap';
 
 //let i:number; 
 //let j:number;
@@ -81,7 +81,7 @@ const App: React.FC = () => {
             <Input_canvas_size
               size = {canvas_size}
               set_canvas_size = {(canvas_size: number[]) => set_canvas_size(canvas_size)}
-
+            />
             <Button>{canvas_tip_data}</Button>
               
           </Col>

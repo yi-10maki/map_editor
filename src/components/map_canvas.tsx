@@ -76,7 +76,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   // 拡大縮小後の再描画
   function drawMap() {
     resizeCanvas();
-    console.log(ratio);
+    //console.log(ratio);
     const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
     // 変数 i,jを定義する
     ctx.clearRect(0, 0, canvas_size_x, canvas_size_y);//プログラム更新時に一旦全体をクリアする
@@ -114,7 +114,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     let img = new Image();
     img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(Math.floor(y/ now_maptip_edge_size), Math.floor(x/ now_maptip_edge_size)) + 1}.png`
     ctx.drawImage(img, cx, cy, now_maptip_edge_size, now_maptip_edge_size);
-    //console.log(cx, cy, now_maptip_edge_size, now_maptip_edge_size)
+    console.log(cx, cy, now_maptip_edge_size, now_maptip_edge_size)
   }
 
 

@@ -8,7 +8,7 @@ import {Container, Row, Col, Button} from 'react-bootstrap';
 
 let i:number; 
 let j:number;
-let pre_canvas_size: number[] = [60, 100];
+//let pre_canvas_size: number[] = [60, 100];
 let next_canvas_size: number[] = [60, 100];
 
 function mapCSVToArray(csv: string): string[] {
@@ -46,38 +46,14 @@ const App: React.FC = () => {
 
   // キャンバスサイズの変更
   // 入力したサイズを現在のサイズと比較して小さい方を基準にcanvas_tip_dataを再設定する
-  const _set_canvas_size = (s: number[]) => {
-    
-    pre_canvas_size[0] = canvas_size[0];
-    pre_canvas_size[1] = canvas_size[1];
-
-    // 分岐
-    if (pre_canvas_size[0] <= s[0] || s[0] > 0) {
-      if (pre_canvas_size[1] <= s[1] || s[1] > 0) {
-        next_canvas_size[0] = pre_canvas_size[0];
-        next_canvas_size[0] = pre_canvas_size[1];
-      } else if (pre_canvas_size[1] > s[1] || s[1] > 0) {
-        next_canvas_size[0] = pre_canvas_size[0];
-        next_canvas_size[0] = s[1];
-      }
-    } else if (pre_canvas_size[0] > s[0] || s[0] > 0) {
-      if (pre_canvas_size[1] <= s[1] || s[1] >= 0) {
-        next_canvas_size[0] = s[0];
-        next_canvas_size[0] = pre_canvas_size[1];
-      } else if (pre_canvas_size[1] > s[1] || s[1] > 0) {
-        next_canvas_size[0] = s[0];
-        next_canvas_size[0] = s[1];
-      }
-    }
-    
-    if (s[0] <= 0 ) next_canvas_size[0] = pre_canvas_size[0];
-    if (s[1] <= 0 ) next_canvas_size[1] = pre_canvas_size[1];
-
+  const _set_canvas_size = (input_size: number[]) => {
+    next_canvas_size = input_size;
+    var copy_canvas_size :number[]=[Math.min(canvas_size[0],input_size[0]), Math.min(canvas_size[1],input_size[1])];
     let temp: number[][] = generate2DArray(next_canvas_size[0], next_canvas_size[1]);
 
     // tempに変更後のサイズ分の変更前のマップチップデータを保存
-    for (i = 0; i<next_canvas_size[0]; i++) {
-      for (j = 0; j<next_canvas_size[1]; j++) {
+    for (i = 0; i<copy_canvas_size[0]; i++) {
+      for (j = 0; j<copy_canvas_size[1]; j++) {
         temp[i][j] = canvas_tip_data[i][j];
       }
     }

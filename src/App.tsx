@@ -48,9 +48,10 @@ const App: React.FC = () => {
   // 入力したサイズを現在のサイズと比較して小さい方を基準にcanvas_tip_dataを再設定する
   const _set_canvas_size = (input_size: number[]) => {
     if(input_size[0]>0 && input_size[1] > 0){
-      next_canvas_size = input_size;
-      var copy_canvas_size :number[]=[ Math.min(canvas_size[0],input_size[0]), Math.min(canvas_size[1],input_size[1])];
-      let temp: number[][] = generate2DArray(next_canvas_size[0], next_canvas_size[1]);
+      next_canvas_size[0] = input_size[0];
+      next_canvas_size[1] = input_size[1];
+      var copy_canvas_size :number[]=[ Math.min( canvas_tip_data.length, input_size[0]), Math.min( canvas_tip_data[0].length, input_size[1])];
+      var temp: number[][] = generate2DArray(next_canvas_size[0], next_canvas_size[1]);
 
       // tempに変更後のサイズ分の変更前のマップチップデータを保存
       for (i = 0; i<copy_canvas_size[0]; i++) {

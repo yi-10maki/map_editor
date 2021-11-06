@@ -89,23 +89,8 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
 
   // 拡大縮小後の再描画
   function drawMap() {
-    console.log(propGetCanvasHeight(),propGetCanvasWidth());
+    //console.log(propGetCanvasHeight(),propGetCanvasWidth());
     resizeCanvas();
-    //console.log(ratio);
-    const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
-    // 変数 i,jを定義する
-    ctx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);//プログラム更新時に一旦全体をクリアする
-    // x 方向にi=0～14まで15マスを描画する
-    for (i = 0; i < propGetCanvasWidth(); i++) {
-      // y 方向にy=0～14まで15マスを描画する
-      for (j = 0; j < propGetCanvasHeight(); j++) {
-        if (propGetMapTip(j, i) == -1) continue;
-        img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(j, i) + 1}.png`;
-        ctx.beginPath();
-        ctx.drawImage(img, i*now_maptip_edge_size, j*now_maptip_edge_size, now_maptip_edge_size, now_maptip_edge_size);
-      }
-    }
-        
   }
 
   function handleMouseMove(e:any){
@@ -146,11 +131,19 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     for (i = 0; i < propGetCanvasWidth(); i++) {
       // y 方向にy=0～14まで15マスを描画する
       for (j = 0; j < propGetCanvasHeight(); j++) {
+        if (propGetMapTip(j, i) == -1) {
+          ctx.beginPath();
+          ctx.strokeStyle = 'black';
+          ctx.strokeRect(i*now_maptip_edge_size, j*now_maptip_edge_size, now_maptip_edge_size, now_maptip_edge_size);
+          
+          continue;
+        }
         img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(j, i) + 1}.png`
         ctx.beginPath();
         ctx.drawImage(img, i*now_maptip_edge_size, j*now_maptip_edge_size, now_maptip_edge_size, now_maptip_edge_size);
       }
     }
+
        
     ctx.save(); // Saves the current drawing style state using a stack so you can revert any change you make to it using restore().
   })

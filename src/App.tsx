@@ -16,7 +16,7 @@ function mapCSVToArray(csv: string): string[] {
 }
 
 const generate2DArray = (m:number, n:number) => {
-  return Array.from(new Array(m), _ => new Array(n).fill(2));
+  return Array.from(new Array(m), _ => new Array(n).fill(-1));
 };
 
 const App: React.FC = () => {
@@ -37,10 +37,17 @@ const App: React.FC = () => {
     return canvas_tip_data[h][w]
   }
 
+  const handleGetCanvasHeight = () => {//マップチップが選択されたときに呼び出される関数
+    return canvas_size[0]
+  }
+  const handleGetCanvasWidth = () => {//マップチップが選択されたときに呼び出される関数
+    return canvas_size[1]
+  }
+
   const _handleClickCanvasTip = (h:number , w:number) => {//キャンバスチップが選択されたときに呼び出される関数
     canvas_tip_data[h][w] = selecting_maptip_id;
     //console.log(temp[h][w])
-    console.log(canvas_tip_data[0])
+    //console.log(canvas_tip_data[0])
     set_canvas_tip_data(canvas_tip_data)
   }
 
@@ -78,7 +85,9 @@ const App: React.FC = () => {
 
             <Map_Canvas
               //maptip_id = {selecting_maptip_id}
-              canvas_size = {canvas_size}
+              //canvas_size = {canvas_size}
+              propGetCanvasHeight={handleGetCanvasHeight}
+              propGetCanvasWidth={handleGetCanvasWidth}
               propGetMapTip={handleGetMapTip} 
               propClickCanvasTip={_handleClickCanvasTip}
               />

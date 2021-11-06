@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useCallback} from "react";
+import React, {useEffect, useRef, useCallback, useState} from "react";
 
 //import "./map_canvas.css"
 //import CanvasTip from "./canvas_tip";
@@ -24,21 +24,24 @@ let y: number = 0; // マウスのy座標の処理に使う
 let img = new Image(); // マップチップを保存
 //img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ仮指定
 let now_maptip_edge_size: number = maptip_edge_size*ratio;
+let now_canvas_size: number[] = [60, 100]
 
 type MapCanvasProps = {
   //maptip_id: number
-  canvas_size: number[]
+  propGetCanvasHeight: () => number;
+  propGetCanvasWidth: () => number;
   propGetMapTip: (h: number, w: number) => number;
   propClickCanvasTip: (h: number, w: number) => void;
 };
 
 const Map_Canvas: React.FC<MapCanvasProps> = ({
   //maptip_id,
-  canvas_size,
+  propGetCanvasHeight,
+  propGetCanvasWidth,  
   propGetMapTip,
   propClickCanvasTip,
 }) => {
-
+  const [ ratio_state, set_ratio_state] = useState<number>(1);
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
 
   // CanvasオブジェクトのgetContext()は、キャンパスに描画するためのコンテキスト(CanvasRenderingContext2Dオブジェクトなど)を取得するメソッド
@@ -50,8 +53,8 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
 
   const resizeCanvas = () => {
     const canvas: any = canvasRef.current;
-    canvas.width = canvas_size[1]*maptip_edge_size*ratio;
-    canvas.height = canvas_size[0]*maptip_edge_size*ratio;
+    canvas.height = now_canvas_size[0] * maptip_edge_size * ratio;
+    canvas.width = now_canvas_size[1] * maptip_edge_size * ratio;
   };
 
   // マウスを押したとき描画フラグをtrue
@@ -70,24 +73,32 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   const enterFunction = useCallback((event) => {
     if(event.keyCode === 191 && ratio < 2) {
       ratio += 0.1;
+      set_ratio_state(ratio);
+      now_maptip_edge_size = maptip_edge_size*ratio;
+      drawMap();
     } else if(event.keyCode === 226 && ratio > 0.41) {
       ratio -= 0.1;
+      set_ratio_state(ratio);
+      now_maptip_edge_size = maptip_edge_size*ratio;
+      drawMap();
+      
     }
-    now_maptip_edge_size = maptip_edge_size*ratio;
-    drawMap();
+    console.log(ratio_state);
+
   }, []);
 
   // 拡大縮小後の再描画
   function drawMap() {
+    console.log(propGetCanvasHeight(),propGetCanvasWidth());
     resizeCanvas();
     //console.log(ratio);
     const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
     // 変数 i,jを定義する
-    ctx.clearRect(0, 0, canvas_size[1]*maptip_edge_size, canvas_size[0]*maptip_edge_size);//プログラム更新時に一旦全体をクリアする
+    ctx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);//プログラム更新時に一旦全体をクリアする
     // x 方向にi=0～14まで15マスを描画する
-    for (i = 0; i < canvas_size[1]; i++) {
+    for (i = 0; i < propGetCanvasWidth(); i++) {
       // y 方向にy=0～14まで15マスを描画する
-      for (j = 0; j < canvas_size[0]; j++) {
+      for (j = 0; j < propGetCanvasHeight(); j++) {
         if (propGetMapTip(j, i) == -1) continue;
         img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(j, i) + 1}.png`;
         ctx.beginPath();
@@ -126,13 +137,15 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   // useEffect: 副作用を有する可能性のある命令型のコードを受け付ける
   // 副作用をReactのrenderフェーズで行うとバグとか非整合が起こるのでこれ使う
   useEffect(() => {
+    now_canvas_size[0] = propGetCanvasHeight();
+    now_canvas_size[1] = propGetCanvasWidth();
     document.addEventListener("keydown", enterFunction, false);
     const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
-    ctx.clearRect(0, 0, canvas_size[1]*maptip_edge_size, canvas_size[0]*maptip_edge_size);//プログラム更新時に一旦全体をクリアする
+    ctx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);//プログラム更新時に一旦全体をクリアする
     // x 方向にi=0～14まで15マスを描画する
-    for (i = 0; i < canvas_size[1]; i++) {
+    for (i = 0; i < propGetCanvasWidth(); i++) {
       // y 方向にy=0～14まで15マスを描画する
-      for (j = 0; j < canvas_size[0]; j++) {
+      for (j = 0; j < propGetCanvasHeight(); j++) {
         img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(j, i) + 1}.png`
         ctx.beginPath();
         ctx.drawImage(img, i*now_maptip_edge_size, j*now_maptip_edge_size, now_maptip_edge_size, now_maptip_edge_size);
@@ -147,12 +160,13 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     <canvas
       id = "mapCanvas"
       className="MapCanvas"
-      width={canvas_size[1]*maptip_edge_size*ratio}
-      height={canvas_size[0]*maptip_edge_size*ratio}
+      width={propGetCanvasWidth()*maptip_edge_size*ratio}
+      height={propGetCanvasHeight()*maptip_edge_size*ratio}
       ref={canvasRef}
       onMouseDown={handleOnMouseDown} //マウスが押されたとき
       onMouseMove={handleMouseMove}   //マウスが動いているとき
       onMouseUp={handleOnMouseUp}     //マウスを離したとき
+      onMouseOut={handleOnMouseUp}    //マウスがキャンバスの外に出た時
     />
 
   );

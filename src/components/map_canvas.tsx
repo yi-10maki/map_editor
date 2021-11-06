@@ -22,7 +22,7 @@ let isDrawing:boolean = false;// マウスが押されているかどうか
 let x: number = 0; // マウスのx座標の処理に使う
 let y: number = 0; // マウスのy座標の処理に使う
 let img = new Image(); // マップチップを保存
-img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ仮指定
+//img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ仮指定
 let now_maptip_edge_size: number = maptip_edge_size*ratio;
 
 type MapCanvasProps = {

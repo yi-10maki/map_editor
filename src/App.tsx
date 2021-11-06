@@ -10,6 +10,10 @@ function mapCSVToArray(csv: string): string[] {
   return csv.split(',');
 }
 
+const generate2DArray = (m:number, n:number) => {
+  return Array.from(new Array(m), _ => new Array(n).fill(2));
+};
+
 const App: React.FC = () => {
   // AppのState これらの値を保持している
   //  maptip_file: 受け取ったマップチップのリスト add_maptiplistから受け取ってmaptip_palletで描画
@@ -20,7 +24,7 @@ const App: React.FC = () => {
 
   let [ canvas_height_num] = useState<number>(60)
   let [ canvas_width_num] = useState<number>(100)
-  let [ canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( new Array(canvas_height_num).fill(new Array(canvas_width_num).fill(2)) )
+  let [ canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( generate2DArray(canvas_height_num, canvas_width_num) )
 
 
 
@@ -29,16 +33,17 @@ const App: React.FC = () => {
   }
 
   const _handleClickCanvasTip = (h:number , w:number) => {//キャンバスチップが選択されたときに呼び出される関数
-    var temp: number[][] = new Array(canvas_height_num).fill(new Array(canvas_width_num).fill(0))
+    /*var temp: number[][] = generate2DArray(canvas_height_num, canvas_width_num)
     for(let i: number=0;i<canvas_height_num;i++){
       for(let j: number=0;j<canvas_width_num;j++){
         temp[i][j]=canvas_tip_data[i][j]
       }
     }
+    */
     //alert(`count：${h}${w}`);
-    temp[h][w]=1;//1のところは本当は選択されているマップチップのidが入る
-    console.log(temp[h][w])
-    set_canvas_tip_data(temp)
+    canvas_tip_data[h][w]=1;//1のところは本当は選択されているマップチップのidが入る
+    //console.log(temp[h][w])
+    set_canvas_tip_data(canvas_tip_data)
   }
 
 

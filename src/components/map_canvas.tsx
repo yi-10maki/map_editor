@@ -10,18 +10,19 @@ import React, {useEffect, useRef, useCallback} from "react";
 */}
 
 // 可変にしたい（プロパティに入力した値を受け取る）
-const grid_x_num: number = 100; // default 1マス40px
-const grid_y_num: number = 60; //
+
 const canvas_size_x: number = 4000; // default 1マス40px
 const canvas_size_y: number = 2400; //
 const maptip_edge_size: number = 40;
 let ratio: number = 1; // 拡大縮小比率
+let grid_x_num: number = 100; // 横のマス目数
+let grid_y_num: number = 60; //縦のマス目数
 let i: number, j: number; // for文用
 let isDrawing:boolean = false;// マウスが押されているかどうか
 let x: number = 0; // マウスのx座標の処理に使う
 let y: number = 0; // マウスのy座標の処理に使う
 let img = new Image(); // マップチップを保存
-img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ仮指定
+//img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ仮指定
 let now_maptip_edge_size: number = maptip_edge_size*ratio;
 
 type MapCanvasProps = {
@@ -103,7 +104,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       x -= tmp;
       tmp = y % now_maptip_edge_size;
       y -= tmp;
-      propClickCanvasTip(y/now_maptip_edge_size ,x/now_maptip_edge_size);
+      propClickCanvasTip(Math.floor(y/now_maptip_edge_size) , Math.floor(x/now_maptip_edge_size) );
       drawMapTip(x, y);
     }
   }
@@ -113,7 +114,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
 
     const ctx: CanvasRenderingContext2D = getContext();
     let img = new Image();
-    img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(y/ now_maptip_edge_size, x/ now_maptip_edge_size) + 1}.png`
+    img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip( Math.floor(y/ now_maptip_edge_size), Math.floor(x/ now_maptip_edge_size) ) + 1}.png`
     ctx.drawImage(img, cx, cy, now_maptip_edge_size, now_maptip_edge_size);
     console.log(cx, cy, now_maptip_edge_size, now_maptip_edge_size)
   }

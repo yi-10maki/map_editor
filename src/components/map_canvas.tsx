@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useCallback, useState} from "react";
 
-//import "./map_canvas.css"
+import "./map_canvas.css"
 //import CanvasTip from "./canvas_tip";
 
 {/*
@@ -46,6 +46,8 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
 }) => {
   const [ temp_state, set_temp_state] = useState<number>(0);
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
+  const effectRef = useRef(null);
+  console.log(ratio_state);
 
   // CanvasオブジェクトのgetContext()は、キャンパスに描画するためのコンテキスト(CanvasRenderingContext2Dオブジェクトなど)を取得するメソッド
   // 引数にコンテキストの種類を指定する　二次元グラフィックを描画するための2d、三次元グラフィックスを描画するためのwebglが主な引数
@@ -54,10 +56,18 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     return canvas.getContext('2d');
   };
 
+  const getEffectContext = (): CanvasRenderingContext2D => {
+    const canvas: any = effectRef.current;
+    return canvas.getContext('2d');
+  };
+
   const resizeCanvas = () => {
     const canvas: any = canvasRef.current;
+    const effect_canvas: any = effectRef.current;
     canvas.height = now_canvas_size[0] * maptip_edge_size * ratio;
     canvas.width = now_canvas_size[1] * maptip_edge_size * ratio;
+    effect_canvas.height = now_canvas_size[0] * maptip_edge_size * ratio;
+    effect_canvas.width = now_canvas_size[1] * maptip_edge_size * ratio;
   };
 
   // マウスを押したとき描画フラグをtrue
@@ -78,11 +88,25 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     } else if(e.nativeEvent.which === 3) {
       endSelect = matchGrid(e);
       console.log(startSelect, endSelect)
+      const ectx: CanvasRenderingContext2D = getEffectContext(); 
+      ectx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);
       if(startSelect[0] == endSelect[0] && startSelect[1] == endSelect[1]) { // 1マス選択は無理
         isSelecting = false;
         console.log("endSelecting");
+      } else {
+        const selectArea: number[] = effectGrid(startSelect, endSelect);
+        //ectx.beginPath();
+        ectx.strokeStyle = 'red';
+        ectx.fillStyle = "rgba(" + [200, 0, 0, 0.1] + ")";
+        ectx.strokeRect(selectArea[0], selectArea[1], selectArea[2]+now_maptip_edge_size, selectArea[3]+now_maptip_edge_size);
+        ectx.fillRect(selectArea[0], selectArea[1], selectArea[2]+now_maptip_edge_size, selectArea[3]+now_maptip_edge_size);
       }
     }
+  }
+
+  const effectGrid = (s:number[], e:number[]) => {
+    const selectArea: number[] = [Math.min(s[0], e[0]), Math.min(s[1], e[1]), Math.abs(s[0]-e[0]), Math.abs(s[1]-e[1])]; // [始点のx座標，始点のy座標，x方向の選択距離，y方向の選択距離]
+    return selectArea;
   }
 
   // startSelectとendSelectをセットするときに使う
@@ -94,8 +118,10 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     let tmp:number;
     tmp = x % now_maptip_edge_size;
     x -= tmp;
+    //x = Math.floor(x / now_maptip_edge_size);
     tmp = y % now_maptip_edge_size;
     y -= tmp;
+    //y = Math.floor(y / now_maptip_edge_size);
     return [x, y]
   }
 
@@ -145,7 +171,6 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       now_maptip_edge_size = maptip_edge_size*ratio;
       drawMap();
     }
-    set_temp_state((temp_state+1)%2)
 
   }, []);
 
@@ -192,8 +217,8 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   })
 
   return (
-    
-    <canvas
+    <div className="layer-wrap">
+      <canvas
       id = "mapCanvas"
       className="MapCanvas"
       width={propGetCanvasWidth()*maptip_edge_size*ratio}
@@ -204,6 +229,21 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       onMouseUp={handleOnMouseUp}     //マウスを離したとき
       onMouseOut={handleOnMouseUp}    //マウスがキャンバスの外に出た時
     />
+    <canvas
+      id = "mapCanvas"
+      className="MapCanvas"
+      width={propGetCanvasWidth()*maptip_edge_size*ratio}
+      height={propGetCanvasHeight()*maptip_edge_size*ratio}
+      ref={effectRef}
+      onMouseDown={handleOnMouseDown} //マウスが押されたとき
+      onMouseMove={handleMouseMove}   //マウスが動いているとき
+      onMouseUp={handleOnMouseUp}     //マウスを離したとき
+      onMouseOut={handleOnMouseUp}    //マウスがキャンバスの外に出た時
+    />
+
+
+    </div>
+    
 
   );
 }

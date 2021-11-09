@@ -3,3 +3,7 @@
     text-align: center;
   }
 
+.btn-addtip {
+  background-color: rgb(58, 58, 58);
+  color: white;
+}

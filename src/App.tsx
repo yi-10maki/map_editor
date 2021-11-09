@@ -27,6 +27,7 @@ const App: React.FC = () => {
   const [maptip_file, set_file_name] = useState<string[]>([]);
   const [selecting_maptip_id, set_selecting_maptip_id] = useState<number>(-1);
   const [canvas_size, set_canvas_size] = useState<number[]>([60,100]);
+  //const [selection_tool_id, set_selection_tool_id] = useState<boolean>(false);
   
   console.log(canvas_size);
 
@@ -71,6 +72,10 @@ const App: React.FC = () => {
       set_canvas_tip_data(temp);
     }
   }
+
+  //const _set_tool = (b: boolean) => {
+  //  set_selection_tool_id(b);
+  //}
   
   return(
     <div>
@@ -80,8 +85,10 @@ const App: React.FC = () => {
       />
       <Container style={{ height: String(window.innerHeight-80)+"px" }} fluid >
         <Row className="h-100">
-          <Tool_bar />
-          <Col xs={9} md={9} className="bg-warning text-white p-1 overflow-scroll h-100">
+          <Tool_bar
+            
+          />
+          <Col xs={9} md={9} className="bg-secondary text-white p-1 overflow-scroll h-100" style={{backgroundColor: "black-50"}}>
 
             <Map_Canvas
               //maptip_id = {selecting_maptip_id}
@@ -93,7 +100,7 @@ const App: React.FC = () => {
               />
 
           </Col>
-          <Col xs={2} md={2} className="bg-danger text-white p-1">
+          <Col xs={2} md={2} className="text-white p-1" style={{backgroundColor: "gray"}}>
             <Add_MapTipList
               set_file_name = {(name: string) => set_file_name(mapCSVToArray(name))}
             />
@@ -102,7 +109,7 @@ const App: React.FC = () => {
               //size = {canvas_size}
               set_canvas_size = {_set_canvas_size}
             />
-            <Button>{canvas_tip_data}</Button>
+            <Button variant="prop">{canvas_tip_data}</Button>
               
           </Col>
         </Row>
@@ -112,3 +119,5 @@ const App: React.FC = () => {
 }
 
 export default App;
+
+//tool_id={_set_tool}

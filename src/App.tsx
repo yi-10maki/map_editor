@@ -1,6 +1,6 @@
 import React,{useState} from "react";
 import Maptip_pallet from "./components/maptip_pallet";
-import Tool_bar from "./components/tool_bar";
+//import Tool_bar from "./components/tool_bar";
 import Add_MapTipList from "./components/add_maptiplist"
 import Map_Canvas from "./components/map_canvas"
 import Input_canvas_size from "./components/input_canvas_size"
@@ -45,6 +45,10 @@ const App: React.FC = () => {
     return canvas_size[1]
   }
 
+  const handleEraserClick = () => {//マップチップが選択されたときに呼び出される関数
+    set_selecting_maptip_id(-1);
+  }
+
   const _handleClickCanvasTip = (h:number , w:number) => {//キャンバスチップが選択されたときに呼び出される関数
     canvas_tip_data[h][w] = selecting_maptip_id;
     //console.log(temp[h][w])
@@ -79,16 +83,25 @@ const App: React.FC = () => {
   
   return(
     <div>
-      <Maptip_pallet
-        img_name = {maptip_file}
-        set_selecting_maptip_id = {(maptip_id: number) => set_selecting_maptip_id(maptip_id)}
-      />
+      <Container fluid >
+        <Row className="h-100">
+          <Col className="d-flex align-items-center justify-content-center" xs={1} md={1} >
+            <Button  variant="prop" className="w-75 h-75 bg-secondary text-white" onMouseDown={handleEraserClick}>消</Button>
+          </Col>
+          <Col xs={11} md={11}>
+          <Maptip_pallet
+            img_name = {maptip_file}
+            set_selecting_maptip_id = {(maptip_id: number) => set_selecting_maptip_id(maptip_id)}
+          />
+          </Col>
+        </Row>
+      </Container>
+
+      <Container style={{ height: String(5)+"px" }} fluid ></Container>
+
       <Container style={{ height: String(window.innerHeight-80)+"px" }} fluid >
         <Row className="h-100">
-          <Tool_bar
-            
-          />
-          <Col xs={9} md={9} className="bg-secondary text-white p-1 overflow-scroll h-100" style={{backgroundColor: "black-50"}}>
+          <Col xs={10} md={10} className="bg-secondary text-white p-1 overflow-scroll h-100" style={{backgroundColor: "black-50"}}>
 
             <Map_Canvas
               //maptip_id = {selecting_maptip_id}

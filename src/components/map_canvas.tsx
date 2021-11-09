@@ -44,7 +44,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   propGetMapTip,
   propClickCanvasTip,
 }) => {
-  const [ ratio_state, set_ratio_state] = useState<number>(1);
+  const [ temp_state, set_temp_state] = useState<number>(0);
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
   const effectRef = useRef(null);
   console.log(ratio_state);
@@ -144,10 +144,19 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   // クリックされた部分の描画
   function drawMapTip(cx:number, cy:number) {
     const ctx: CanvasRenderingContext2D = getContext();
-    let img = new Image();
-    img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(Math.floor(y/ now_maptip_edge_size), Math.floor(x/ now_maptip_edge_size)) + 1}.png`
-    ctx.drawImage(img, cx, cy, now_maptip_edge_size, now_maptip_edge_size);
-    console.log(cx, cy, now_maptip_edge_size, now_maptip_edge_size)
+    if (propGetMapTip(Math.floor(cy/now_maptip_edge_size), Math.floor(cx/now_maptip_edge_size)) == -1) {
+      ctx.clearRect(cx, cy, now_maptip_edge_size, now_maptip_edge_size);//プログラム更新時に一旦全体をクリアする
+      ctx.beginPath();
+      ctx.strokeStyle = 'black';
+      ctx.strokeRect(cx, cy, now_maptip_edge_size, now_maptip_edge_size);
+    }
+    else{
+      let img = new Image();
+      img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(Math.floor(y/ now_maptip_edge_size), Math.floor(x/ now_maptip_edge_size)) + 1}.png`
+      ctx.drawImage(img, cx, cy, now_maptip_edge_size, now_maptip_edge_size);
+      console.log(cx, cy, now_maptip_edge_size, now_maptip_edge_size)
+    }
+
   }
 
   // 拡大縮小用キー入力受け取り
@@ -155,16 +164,13 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   const enterFunction = useCallback((event) => {
     if(event.keyCode === 191 && ratio < 2) {
       ratio += 0.1;
-      set_ratio_state(ratio);
       now_maptip_edge_size = maptip_edge_size*ratio;
       drawMap();
     } else if(event.keyCode === 226 && ratio > 0.41) {
       ratio -= 0.1;
-      set_ratio_state(ratio);
       now_maptip_edge_size = maptip_edge_size*ratio;
       drawMap();
     }
-    
 
   }, []);
 

@@ -1,0 +1,7 @@
+.layer-wrap {
+    position: relative;
+}
+   
+.layer-wrap > canvas {
+    position: absolute!important;
+}

@@ -15,7 +15,7 @@ import "./tool_bar.css"
 const Tool_bar: React.FC = () => {
   return (
     <Col className="p-1" xs={1} md={1} style={{backgroundColor: "gray"}}>
-      <Button className="m-1" variant="tool_bar">選</Button>
+      
       <Button className="m-1" variant="tool_bar">戻</Button>
       <Button className="m-1" variant="tool_bar">進</Button>
     </Col>
@@ -25,6 +25,7 @@ const Tool_bar: React.FC = () => {
 export default Tool_bar;
 
 {/** 
+<Button className="m-1" variant="tool_bar">選</Button>
 <Button className="m-1" variant="tool_bar">描</Button>
 <Button className="m-1" variant="tool_bar">消</Button>
 <Button className="m-1" variant="tool_bar">塗</Button>

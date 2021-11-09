@@ -1,5 +1,6 @@
 import React from "react";
 import { Button,Form } from "react-bootstrap";
+import "./input_canvas_size.css"
 import "bootstrap/dist/css/bootstrap.min.css";
 
 type Props = {
@@ -43,7 +44,7 @@ const Input_canvas_size: React.FC<Props> = ({
         <Form.Label>横</Form.Label>
         <Form.Control type="number" placeholder="マップの横のサイズを入力してください" onChange={handleWidthChange}/>
       </Form.Group>
-      <Button variant="primary" type="button" onClick={handleSet}>
+      <Button variant="change" type="button" onClick={handleSet}>
         変更
       </Button>
     </Form>

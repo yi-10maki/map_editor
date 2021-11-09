@@ -50,7 +50,7 @@ const Add_MapTipList: React.FC<Props> = (props) => {
   const handleShow = () => setShow(true);
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
+      <Button variant="addtip" onClick={handleShow}>
         マップチップリストの追加
       </Button>
       <Modal

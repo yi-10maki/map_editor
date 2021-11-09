@@ -18,9 +18,12 @@ import React, {useEffect, useRef, useCallback, useState} from "react";
 const maptip_edge_size: number = 40;
 let ratio: number = 1; // 拡大縮小比率
 let i: number, j: number; // for文用
-let isDrawing:boolean = false;// マウスが押されているかどうか
+let isDrawing: boolean = false;// マウスが左クリックされているかどうか
+let isSelecting: boolean = false;// マウスが右クリックされているかどうか
 let x: number = 0; // マウスのx座標の処理に使う
 let y: number = 0; // マウスのy座標の処理に使う
+let startSelect: number[] = [0, 0];
+let endSelect: number[] = [0, 0] ;
 let img = new Image(); // マップチップを保存
 //img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ仮指定
 let now_maptip_edge_size: number = maptip_edge_size*ratio;
@@ -58,43 +61,46 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   };
 
   // マウスを押したとき描画フラグをtrue
-  function handleOnMouseDown(e:any){
-    isDrawing = true;
+  function handleOnMouseDown(e:any) {
+    if(e.nativeEvent.which === 1) {
+      isDrawing = true;
+    } else if(e.nativeEvent.which === 3) {
+      isSelecting = true;
+      startSelect = matchGrid(e);
+    }
     handleMouseMove(e);
   }
 
   // マウスを離したとき描画フラグをfalse
-  function handleOnMouseUp(e:any){
-    isDrawing = false;
-  }
-
-  // 拡大縮小用キー入力受け取り
-  // キャンバス部分を選択していなくてもキー入力だけで動作するため他の機能で使わなさそうなキーを使う
-  const enterFunction = useCallback((event) => {
-    if(event.keyCode === 191 && ratio < 2) {
-      ratio += 0.1;
-      set_ratio_state(ratio);
-      now_maptip_edge_size = maptip_edge_size*ratio;
-      drawMap();
-    } else if(event.keyCode === 226 && ratio > 0.41) {
-      ratio -= 0.1;
-      set_ratio_state(ratio);
-      now_maptip_edge_size = maptip_edge_size*ratio;
-      drawMap();
-      
+  function handleOnMouseUp(e:any) {
+    if(e.nativeEvent.which === 1) {
+      isDrawing = false;
+    } else if(e.nativeEvent.which === 3) {
+      endSelect = matchGrid(e);
+      console.log(startSelect, endSelect)
+      if(startSelect[0] == endSelect[0] && startSelect[1] == endSelect[1]) { // 1マス選択は無理
+        isSelecting = false;
+        console.log("endSelecting");
+      }
     }
-    console.log(ratio_state);
-
-  }, []);
-
-  // 拡大縮小後の再描画
-  function drawMap() {
-    //console.log(propGetCanvasHeight(),propGetCanvasWidth());
-    resizeCanvas();
   }
 
-  function handleMouseMove(e:any){
-    if(isDrawing){
+  // startSelectとendSelectをセットするときに使う
+  const matchGrid = (e:any) => {
+    let rect: any = e.target.getBoundingClientRect();
+    // マス目に合わせる処理
+    x = e.clientX - rect.left;
+    y = e.clientY - rect.top;
+    let tmp:number;
+    tmp = x % now_maptip_edge_size;
+    x -= tmp;
+    tmp = y % now_maptip_edge_size;
+    y -= tmp;
+    return [x, y]
+  }
+
+  function handleMouseMove(e:any) {
+    if(isDrawing) {
       let rect: any = e.target.getBoundingClientRect();
       // マス目に合わせる処理
       x = e.clientX - rect.left;
@@ -118,10 +124,40 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     console.log(cx, cy, now_maptip_edge_size, now_maptip_edge_size)
   }
 
+  // 拡大縮小用キー入力受け取り
+  // キャンバス部分を選択していなくてもキー入力だけで動作するため他の機能で使わなさそうなキーを使う
+  const enterFunction = useCallback((event) => {
+    if(event.keyCode === 191 && ratio < 2) {
+      ratio += 0.1;
+      set_ratio_state(ratio);
+      now_maptip_edge_size = maptip_edge_size*ratio;
+      drawMap();
+    } else if(event.keyCode === 226 && ratio > 0.41) {
+      ratio -= 0.1;
+      set_ratio_state(ratio);
+      now_maptip_edge_size = maptip_edge_size*ratio;
+      drawMap();
+    }
+    console.log(ratio_state);
+
+  }, []);
+
+  // 拡大縮小後の再描画
+  function drawMap() {
+    //console.log(propGetCanvasHeight(),propGetCanvasWidth());
+    resizeCanvas();
+  }
+
+  document.oncontextmenu = contextmenu;
+
+  function contextmenu() {
+	  return false;
+  }
 
   // useEffect: 副作用を有する可能性のある命令型のコードを受け付ける
   // 副作用をReactのrenderフェーズで行うとバグとか非整合が起こるのでこれ使う
   useEffect(() => {
+    isSelecting =  isSelecting;
     now_canvas_size[0] = propGetCanvasHeight();
     now_canvas_size[1] = propGetCanvasWidth();
     document.addEventListener("keydown", enterFunction, false);

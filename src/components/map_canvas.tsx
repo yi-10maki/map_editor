@@ -47,7 +47,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   const [ temp_state, set_temp_state] = useState<number>(0);
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
   const effectRef = useRef(null);
-  console.log(ratio_state);
+  console.log(temp_state);
 
   // CanvasオブジェクトのgetContext()は、キャンパスに描画するためのコンテキスト(CanvasRenderingContext2Dオブジェクトなど)を取得するメソッド
   // 引数にコンテキストの種類を指定する　二次元グラフィックを描画するための2d、三次元グラフィックスを描画するためのwebglが主な引数
@@ -166,10 +166,12 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       ratio += 0.1;
       now_maptip_edge_size = maptip_edge_size*ratio;
       drawMap();
+      set_temp_state(ratio);
     } else if(event.keyCode === 226 && ratio > 0.41) {
       ratio -= 0.1;
       now_maptip_edge_size = maptip_edge_size*ratio;
       drawMap();
+      set_temp_state(ratio);
     }
 
   }, []);

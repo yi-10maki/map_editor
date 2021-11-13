@@ -48,6 +48,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   propClickCanvasTip,
 }) => {
   const [ temp_state, set_temp_state] = useState<number>(0);
+  const [update,setUpdata]=useState<boolean>(false)
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
   const effectRef = useRef(null);
   console.log(temp_state);
@@ -81,6 +82,9 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     } else if(e.nativeEvent.which === 3) {
       isSelecting = true;
       startSelect = matchGrid(e);
+    } else if(e.nativeEvent.which === 2 && isSelecting) {
+      e.preventDefault();
+      fillArea(e);
     }
     handleMouseMove(e);
   }
@@ -115,13 +119,12 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
 
   */}
 
+  // 選択範囲を[始点のx座標，始点のy座標，x方向の選択距離，y方向の選択距離]の形で出来た
   const effectGrid = (s:number[], e:number[]) => {
-    const selectingArea: number[] = [Math.floor(Math.min(s[0], e[0])/now_maptip_edge_size), Math.floor(Math.min(s[1], e[1])/now_maptip_edge_size), Math.floor(Math.abs(s[0]-e[0])/now_maptip_edge_size + 1), Math.floor(Math.abs(s[1]-e[1])/now_maptip_edge_size + 1)]; // [始点のx座標，始点のy座標，x方向の選択距離，y方向の選択距離]
+    const selectingArea: number[] = [Math.floor(Math.min(s[0], e[0])/now_maptip_edge_size), Math.floor(Math.min(s[1], e[1])/now_maptip_edge_size), Math.floor(Math.abs(s[0]-e[0])/now_maptip_edge_size + 1), Math.floor(Math.abs(s[1]-e[1])/now_maptip_edge_size + 1)]; 
     console.log(selectingArea);
     return selectingArea;
   }
-
-
 
   // startSelectとendSelectをセットするときに使う
   const matchGrid = (e:any) => {
@@ -179,41 +182,27 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     if(event.keyCode === 191 && ratio < 2) {
       ratio += 0.1;
       now_maptip_edge_size = maptip_edge_size*ratio;
-      drawMap();
+      resizeCanvas();
       set_temp_state(ratio);
     } else if(event.keyCode === 226 && ratio > 0.41) {
       ratio -= 0.1;
       now_maptip_edge_size = maptip_edge_size*ratio;
-      drawMap();
+      resizeCanvas();
       set_temp_state(ratio);
-    } else if(event.keyCode === 70 && isSelecting) {
-      //fillArea();
     }
   }, []);
 
-  {/**
-    function fillArea() {
+    function fillArea(e: any) {
     //const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
     // x 方向に描画する
     for (i = selectArea[0]; i < selectArea[0]+selectArea[2]; i++) {
       // y 方向に描画する
       for (j = selectArea[1]; j < selectArea[1]+selectArea[3]; j++) {
         propClickCanvasTip(j,i);
-        console.log(propGetMapTip(j, i));
-        
       }
     }
-  }
-  
-  
-  */}
-
-  
-
-  // 拡大縮小後の再描画
-  function drawMap() {
-    resizeCanvas();
-    console.log("resizecanvas")
+    setUpdata(prestate => !prestate);
+    console.log(update)
   }
 
   // 右クリックでメニューが開かないようにする
@@ -225,16 +214,15 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   // useEffect: 副作用を有する可能性のある命令型のコードを受け付ける
   // 副作用をReactのrenderフェーズで行うとバグとか非整合が起こるのでこれ使う
   useEffect(() => {
-    console.log("useEffect");
     isSelecting =  isSelecting;
     now_canvas_size[0] = propGetCanvasHeight();
     now_canvas_size[1] = propGetCanvasWidth();
     document.addEventListener("keydown", enterFunction, false);
     const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
     ctx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);//プログラム更新時に一旦全体をクリアする
-    // x 方向にi=0～14まで15マスを描画する
+    // x 方向に描画する
     for (i = 0; i < propGetCanvasWidth(); i++) {
-      // y 方向にy=0～14まで15マスを描画する
+      // y 方向に描画する
       for (j = 0; j < propGetCanvasHeight(); j++) {
         if (propGetMapTip(j, i) == -1) {
           ctx.beginPath();
@@ -259,6 +247,10 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     }
        
     ctx.save(); // Saves the current drawing style state using a stack so you can revert any change you make to it using restore().
+    return () => {
+      // イベントリスナを解除
+      document.removeEventListener("keydown", enterFunction, false);
+    };
   })
 
   return (
@@ -285,11 +277,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       onMouseUp={handleOnMouseUp}     //マウスを離したとき
       onMouseOut={handleOnMouseUp}    //マウスがキャンバスの外に出た時
     />
-
-
-    </div>
-    
-
+  </div>
   );
 }
 

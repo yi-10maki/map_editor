@@ -18,16 +18,19 @@ import "./map_canvas.css"
 const maptip_edge_size: number = 40;
 let ratio: number = 1; // 拡大縮小比率
 let i: number, j: number; // for文用
-let isDrawing: boolean = false;// マウスが左クリックされているかどうか
-let isSelecting: boolean = false;// マウスが右クリックされているかどうか
+let isDrawing: boolean = false; // マウスが左クリックされているかどうか
+let isSelecting: boolean = false; // マウスが右クリックされているかどうか
+//let isMoving: boolean = false; // 選択した範囲を動かしているか
 let x: number = 0; // マウスのx座標の処理に使う
 let y: number = 0; // マウスのy座標の処理に使う
-let startSelect: number[] = [0, 0];
-let endSelect: number[] = [0, 0] ;
+let startSelect: number[] = [0, 0]; // 右クリックを押した座標
+let endSelect: number[] = [0, 0] ; // 右クリックを離した座標
 let img = new Image(); // マップチップを保存
 //img.src = `${process.env.PUBLIC_URL}/maptip/maptip3.png`; // マップチップ仮指定
 let now_maptip_edge_size: number = maptip_edge_size*ratio;
-let now_canvas_size: number[] = [60, 100]
+let now_canvas_size: number[] = [60, 100];
+let selectArea: number[]; // 選択範囲の左上と右下の座標
+//let selectAreaTips: number[]; // 範囲選択した部分のマップチップデータ
 
 type MapCanvasProps = {
   //maptip_id: number
@@ -68,6 +71,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     canvas.width = now_canvas_size[1] * maptip_edge_size * ratio;
     effect_canvas.height = now_canvas_size[0] * maptip_edge_size * ratio;
     effect_canvas.width = now_canvas_size[1] * maptip_edge_size * ratio;
+    console.log("resize")
   };
 
   // マウスを押したとき描画フラグをtrue
@@ -87,27 +91,37 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       isDrawing = false;
     } else if(e.nativeEvent.which === 3) {
       endSelect = matchGrid(e);
-      console.log(startSelect, endSelect)
       const ectx: CanvasRenderingContext2D = getEffectContext(); 
       ectx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);
       if(startSelect[0] == endSelect[0] && startSelect[1] == endSelect[1]) { // 1マス選択は無理
         isSelecting = false;
         console.log("endSelecting");
       } else {
-        const selectArea: number[] = effectGrid(startSelect, endSelect);
+        selectArea= effectGrid(startSelect, endSelect);
         //ectx.beginPath();
         ectx.strokeStyle = 'red';
         ectx.fillStyle = "rgba(" + [200, 0, 0, 0.1] + ")";
-        ectx.strokeRect(selectArea[0], selectArea[1], selectArea[2]+now_maptip_edge_size, selectArea[3]+now_maptip_edge_size);
-        ectx.fillRect(selectArea[0], selectArea[1], selectArea[2]+now_maptip_edge_size, selectArea[3]+now_maptip_edge_size);
+        ectx.strokeRect(selectArea[0]*now_maptip_edge_size, selectArea[1]*now_maptip_edge_size, selectArea[2]*now_maptip_edge_size, selectArea[3]*now_maptip_edge_size);
+        ectx.fillRect(selectArea[0]*now_maptip_edge_size, selectArea[1]*now_maptip_edge_size, selectArea[2]*now_maptip_edge_size, selectArea[3]*now_maptip_edge_size);
       }
     }
   }
 
+  {/**
+    選択範囲のマップチップデータををコピー
+    移動先に貼り付けると同時に元のところのデータを消し、選択範囲も移動する
+    端に移動した場合は例外処理を行う
+    copyArea, pasteArea
+
+  */}
+
   const effectGrid = (s:number[], e:number[]) => {
-    const selectArea: number[] = [Math.min(s[0], e[0]), Math.min(s[1], e[1]), Math.abs(s[0]-e[0]), Math.abs(s[1]-e[1])]; // [始点のx座標，始点のy座標，x方向の選択距離，y方向の選択距離]
-    return selectArea;
+    const selectingArea: number[] = [Math.floor(Math.min(s[0], e[0])/now_maptip_edge_size), Math.floor(Math.min(s[1], e[1])/now_maptip_edge_size), Math.floor(Math.abs(s[0]-e[0])/now_maptip_edge_size + 1), Math.floor(Math.abs(s[1]-e[1])/now_maptip_edge_size + 1)]; // [始点のx座標，始点のy座標，x方向の選択距離，y方向の選択距離]
+    console.log(selectingArea);
+    return selectingArea;
   }
+
+
 
   // startSelectとendSelectをセットするときに使う
   const matchGrid = (e:any) => {
@@ -137,6 +151,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       tmp = y % now_maptip_edge_size;
       y -= tmp;
       propClickCanvasTip(Math.floor(y/now_maptip_edge_size), Math.floor(x/now_maptip_edge_size));
+      console.log(propGetMapTip(Math.floor(y/now_maptip_edge_size), Math.floor(x/now_maptip_edge_size)))
       drawMapTip(x, y);
     }
   }
@@ -151,12 +166,11 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       ctx.strokeRect(cx, cy, now_maptip_edge_size, now_maptip_edge_size);
     }
     else{
-      let img = new Image();
       img.src = `${process.env.PUBLIC_URL}/maptip/maptip${propGetMapTip(Math.floor(y/ now_maptip_edge_size), Math.floor(x/ now_maptip_edge_size)) + 1}.png`
       ctx.drawImage(img, cx, cy, now_maptip_edge_size, now_maptip_edge_size);
       console.log(cx, cy, now_maptip_edge_size, now_maptip_edge_size)
+      console.log(propGetMapTip(Math.floor(y/ now_maptip_edge_size), Math.floor(x/ now_maptip_edge_size)))
     }
-
   }
 
   // 拡大縮小用キー入力受け取り
@@ -172,18 +186,38 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       now_maptip_edge_size = maptip_edge_size*ratio;
       drawMap();
       set_temp_state(ratio);
+    } else if(event.keyCode === 70 && isSelecting) {
+      //fillArea();
     }
-
   }, []);
+
+  {/**
+    function fillArea() {
+    //const ctx: CanvasRenderingContext2D = getContext(); // 二次元グラフィックスのコンテキストを取得
+    // x 方向に描画する
+    for (i = selectArea[0]; i < selectArea[0]+selectArea[2]; i++) {
+      // y 方向に描画する
+      for (j = selectArea[1]; j < selectArea[1]+selectArea[3]; j++) {
+        propClickCanvasTip(j,i);
+        console.log(propGetMapTip(j, i));
+        
+      }
+    }
+  }
+  
+  
+  */}
+
+  
 
   // 拡大縮小後の再描画
   function drawMap() {
-    //console.log(propGetCanvasHeight(),propGetCanvasWidth());
     resizeCanvas();
+    console.log("resizecanvas")
   }
 
+  // 右クリックでメニューが開かないようにする
   document.oncontextmenu = contextmenu;
-
   function contextmenu() {
 	  return false;
   }
@@ -191,6 +225,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   // useEffect: 副作用を有する可能性のある命令型のコードを受け付ける
   // 副作用をReactのrenderフェーズで行うとバグとか非整合が起こるのでこれ使う
   useEffect(() => {
+    console.log("useEffect");
     isSelecting =  isSelecting;
     now_canvas_size[0] = propGetCanvasHeight();
     now_canvas_size[1] = propGetCanvasWidth();
@@ -214,6 +249,14 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       }
     }
 
+    const ectx: CanvasRenderingContext2D = getEffectContext(); 
+    ectx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);
+    if(isSelecting == true) { 
+      ectx.strokeStyle = 'red';
+      ectx.fillStyle = "rgba(" + [200, 0, 0, 0.1] + ")";
+      ectx.strokeRect(selectArea[0]*now_maptip_edge_size, selectArea[1]*now_maptip_edge_size, selectArea[2]*now_maptip_edge_size, selectArea[3]*now_maptip_edge_size);
+      ectx.fillRect(selectArea[0]*now_maptip_edge_size, selectArea[1]*now_maptip_edge_size, selectArea[2]*now_maptip_edge_size, selectArea[3]*now_maptip_edge_size);
+    }
        
     ctx.save(); // Saves the current drawing style state using a stack so you can revert any change you make to it using restore().
   })

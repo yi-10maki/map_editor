@@ -51,9 +51,9 @@ const App: React.FC = () => {
 
   const _handleClickCanvasTip = (h:number , w:number) => {//キャンバスチップが選択されたときに呼び出される関数
     canvas_tip_data[h][w] = selecting_maptip_id;
-    //console.log(temp[h][w])
-    //console.log(canvas_tip_data[0])
-    set_canvas_tip_data(canvas_tip_data)
+    // console.log(canvas_tip_data[h][w]);
+    console.log(selecting_maptip_id);
+    set_canvas_tip_data(canvas_tip_data);
   }
 
   // キャンバスサイズの変更

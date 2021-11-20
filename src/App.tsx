@@ -56,6 +56,13 @@ const App: React.FC = () => {
     set_canvas_tip_data(canvas_tip_data);
   }
 
+  // 範囲選択の際に用いる関数
+  // map_canvas側でid(マップチップの種類)を指定できる
+  const _handleCopyCanvasTip = (h:number, w:number, id:number) => {
+    canvas_tip_data[h][w] = id;
+    set_canvas_tip_data(canvas_tip_data);
+  }
+
   // キャンバスサイズの変更
   // 入力したサイズを現在のサイズと比較して小さい方を基準にcanvas_tip_dataを再設定する
   const _set_canvas_size = (input_size: number[]) => {
@@ -110,6 +117,7 @@ const App: React.FC = () => {
               propGetCanvasWidth={handleGetCanvasWidth}
               propGetMapTip={handleGetMapTip} 
               propClickCanvasTip={_handleClickCanvasTip}
+              propCopyCanvasTip={_handleCopyCanvasTip}
               />
 
           </Col>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button,Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import "./input_canvas_size.css"
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -37,12 +37,12 @@ const Input_canvas_size: React.FC<Props> = ({
     <Form>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>縦</Form.Label>
-        <Form.Control type="number" placeholder="マップの縦のサイズを入力してください" onChange={handleHeightChange}/>
+        <Form.Control type="number" value={60} placeholder="マップの縦のサイズを入力してください" onChange={handleHeightChange}/>
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>横</Form.Label>
-        <Form.Control type="number" placeholder="マップの横のサイズを入力してください" onChange={handleWidthChange}/>
+        <Form.Control type="number" value={100} placeholder="マップの横のサイズを入力してください" onChange={handleWidthChange}/>
       </Form.Group>
       <Button variant="change" type="button" onClick={handleSet}>
         変更

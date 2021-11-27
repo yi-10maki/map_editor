@@ -19,7 +19,6 @@ const generate2DArray = (m:number, n:number) => {
   return Array.from(new Array(m), _ => new Array(n).fill(-1));
 };
 
-
 const App: React.FC = () => {
   // AppのState これらの値を保持している
   //  maptip_file: 受け取ったマップチップのリスト add_maptiplistから受け取ってmaptip_palletで描画

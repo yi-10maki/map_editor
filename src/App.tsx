@@ -34,7 +34,15 @@ const App: React.FC = () => {
   let [canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( generate2DArray(canvas_size[0], canvas_size[1]) );
   //let temp: number[][] = generate2DArray(canvas_width_num, canvas_height_num)
 
+
+  /*
+  const handleInputMapData = (map_data : number[][])=>{
+    set_canvas_size([map_data.length,map_data[0].length])
+    set_canvas_tip_data(map_data)
+  }
+  */
   const [exportFileName,set_exportFileName] = useState<string>("sample.csv");
+
 
   const handleGetMapTip = (h:number , w:number) => {//マップチップが選択されたときに呼び出される関数
     return canvas_tip_data[h][w]

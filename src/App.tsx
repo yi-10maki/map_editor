@@ -6,7 +6,7 @@ import Map_Canvas from "./components/map_canvas"
 import Input_canvas_size from "./components/input_canvas_size"
 import {Container, Row, Col, Button} from 'react-bootstrap';
 
-let i:number; 
+let i:number;
 let j:number;
 //let pre_canvas_size: number[] = [60, 100];
 let next_canvas_size: number[] = [60, 100];
@@ -19,6 +19,14 @@ const generate2DArray = (m:number, n:number) => {
   return Array.from(new Array(m), _ => new Array(n).fill(-1));
 };
 
+const handleExportNameChange = (event) => {
+  link.download = event.target.value;
+  console.log(link.download)
+}
+
+const handleExportNameSet = () => {
+}
+
 const App: React.FC = () => {
   // AppのState これらの値を保持している
   //  maptip_file: 受け取ったマップチップのリスト add_maptiplistから受け取ってmaptip_palletで描画
@@ -28,7 +36,7 @@ const App: React.FC = () => {
   const [selecting_maptip_id, set_selecting_maptip_id] = useState<number>(-1);
   const [canvas_size, set_canvas_size] = useState<number[]>([60,100]);
   //const [selection_tool_id, set_selection_tool_id] = useState<boolean>(false);
-  
+
   console.log(canvas_size);
 
   let [canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( generate2DArray(canvas_size[0], canvas_size[1]) );
@@ -87,7 +95,7 @@ const App: React.FC = () => {
   //const _set_tool = (b: boolean) => {
   //  set_selection_tool_id(b);
   //}
-  
+
   return(
     <div>
       <Container fluid >
@@ -115,7 +123,7 @@ const App: React.FC = () => {
               //canvas_size = {canvas_size}
               propGetCanvasHeight={handleGetCanvasHeight}
               propGetCanvasWidth={handleGetCanvasWidth}
-              propGetMapTip={handleGetMapTip} 
+              propGetMapTip={handleGetMapTip}
               propClickCanvasTip={_handleClickCanvasTip}
               propCopyCanvasTip={_handleCopyCanvasTip}
               />
@@ -130,8 +138,15 @@ const App: React.FC = () => {
               //size = {canvas_size}
               set_canvas_size = {_set_canvas_size}
             />
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>出力ファイル名変更</Form.Label>
+              <Form.Control type="number" placeholder="出力するファイル名を入力して下さい" onChange={handleExportNameChange}/>
+            </Form.Group>
+            <Button variant="change" type="button" onClick={handleExportNameSet}>
+              決定
+            </Button>
             <Button variant="prop">{canvas_tip_data}</Button>
-              
           </Col>
         </Row>
       </Container>

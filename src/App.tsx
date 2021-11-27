@@ -2,6 +2,7 @@ import React,{useState} from "react";
 import Maptip_pallet from "./components/maptip_pallet";
 //import Tool_bar from "./components/tool_bar";
 import Add_MapTipList from "./components/add_maptiplist"
+import InputMapData from "./components/input_map_data_sub"
 import Map_Canvas from "./components/map_canvas"
 import Input_canvas_size from "./components/input_canvas_size"
 import {Container, Row, Col, Button} from 'react-bootstrap';
@@ -34,12 +35,10 @@ const App: React.FC = () => {
   let [canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( generate2DArray(canvas_size[0], canvas_size[1]) );
   //let temp: number[][] = generate2DArray(canvas_width_num, canvas_height_num)
 
-  /*
   const handleInputMapData = (map_data : number[][])=>{
-    set_canvas_size([map_data.length,map_data[0].length])
+    _set_canvas_size([map_data.length, map_data[0].length])
     set_canvas_tip_data(map_data)
   }
-  */
 
   const handleGetMapTip = (h:number , w:number) => {//マップチップが選択されたときに呼び出される関数
     return canvas_tip_data[h][w]
@@ -147,6 +146,9 @@ const App: React.FC = () => {
           <Col xs={2} md={2} className="text-white p-1" style={{backgroundColor: "gray"}}>
             <Add_MapTipList
               set_file_name = {(name: string) => set_file_name(mapCSVToArray(name))}
+            />
+            <InputMapData
+              input_data = {handleInputMapData}
             />
 
             <Input_canvas_size

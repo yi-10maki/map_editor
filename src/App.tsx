@@ -1,20 +1,27 @@
 import React,{useState} from "react";
 import Maptip_pallet from "./components/maptip_pallet";
 //import Tool_bar from "./components/tool_bar";
-import Add_MapTipList from "./components/add_maptiplist"
-import InputMapData from "./components/input_map_data_sub"
-import Map_Canvas from "./components/map_canvas"
-import Input_canvas_size from "./components/input_canvas_size"
-import {Container, Row, Col, Button} from 'react-bootstrap';
+import Add_MapTipList from "./components/add_maptiplist";
+import Map_Canvas from "./components/map_canvas";
+import Input_canvas_size from "./components/input_canvas_size";
+import Import_MapData from "./components/import_map_data";
+import {Container, Row, Col, Button, Form} from 'react-bootstrap';
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-let i:number; 
+
+let i:number;
 let j:number;
 //let pre_canvas_size: number[] = [60, 100];
 let next_canvas_size: number[] = [60, 100];
 
+// 受け取ったマップチップリストを配列に変換
 function mapCSVToArray(csv: string): string[] {
   return csv.split(',');
 }
+
+// 受け取ったマップデータをnumber型の2次元配列に変換
+
 
 const generate2DArray = (m:number, n:number) => {
   return Array.from(new Array(m), _ => new Array(n).fill(-1));
@@ -22,23 +29,21 @@ const generate2DArray = (m:number, n:number) => {
 
 const App: React.FC = () => {
   // AppのState これらの値を保持している
-  //  maptip_file: 受け取ったマップチップのリスト add_maptiplistから受け取ってmaptip_palletで描画
-  //  selecting_maptip_id: 現在選択中のマップチップのid maptip_palletから受け取って色々使う 初期値は-1
-  //  canvas_size: エディタのマップのサイズ input_canvas_sizeから受け取って色々使う 初期値は縦50,横25
+  // maptip_file: 受け取ったマップチップのリスト add_maptiplistから受け取ってmaptip_palletで描画
+  // selecting_maptip_id: 現在選択中のマップチップのid maptip_palletから受け取って色々使う 初期値は-1
+  // canvas_size: エディタのマップのサイズ input_canvas_sizeから受け取って色々使う 初期値は縦50,横25
   const [maptip_file, set_file_name] = useState<string[]>([]);
   const [selecting_maptip_id, set_selecting_maptip_id] = useState<number>(-1);
   const [canvas_size, set_canvas_size] = useState<number[]>([60,100]);
-  //const [selection_tool_id, set_selection_tool_id] = useState<boolean>(false);
-  
-  console.log(canvas_size);
-
   let [canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( generate2DArray(canvas_size[0], canvas_size[1]) );
+  //const [selection_tool_id, set_selection_tool_id] = useState<boolean>(false);
+
+  console.log(canvas_size);
+  
   //let temp: number[][] = generate2DArray(canvas_width_num, canvas_height_num)
 
-  const handleInputMapData = (map_data : number[][])=>{
-    _set_canvas_size([map_data.length, map_data[0].length])
-    set_canvas_tip_data(map_data)
-  }
+  const [exportFileName,set_exportFileName] = useState<string>("sample.csv");
+
 
   const handleGetMapTip = (h:number , w:number) => {//マップチップが選択されたときに呼び出される関数
     return canvas_tip_data[h][w]
@@ -55,6 +60,11 @@ const App: React.FC = () => {
     set_selecting_maptip_id(-1);
   }
 
+  const handleInputMapData = (map_data : number[][])=>{
+    _set_canvas_size([map_data.length, map_data[0].length])
+    set_canvas_tip_data(map_data)
+  }
+
   const _handleClickCanvasTip = (h:number , w:number) => {//キャンバスチップが選択されたときに呼び出される関数
     canvas_tip_data[h][w] = selecting_maptip_id;
     // console.log(canvas_tip_data[h][w]);
@@ -67,6 +77,11 @@ const App: React.FC = () => {
   const _handleCopyCanvasTip = (h:number, w:number, id:number) => {
     canvas_tip_data[h][w] = id;
     set_canvas_tip_data(canvas_tip_data);
+  }
+
+  // 出力ファイル名を入力する度に呼ばれるやつ
+  const handleExportNameChange = (event: any) => {
+    set_exportFileName(event.target.value)
   }
 
   // キャンバスサイズの変更
@@ -97,19 +112,13 @@ const App: React.FC = () => {
     let blob = new Blob([bom, data], {type: 'text/csv'});
     let url = (window.URL || window.webkitURL).createObjectURL(blob);
     let link = document.createElement('a');
-    link.download = 'map_data.csv';
+    link.download = exportFileName;
     link.href = url;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   }
 
-  
-
-  //const _set_tool = (b: boolean) => {
-  //  set_selection_tool_id(b);
-  //}
-  
   return(
     <div>
       <Container fluid >
@@ -131,33 +140,32 @@ const App: React.FC = () => {
       <Container style={{ height: String(window.innerHeight-80)+"px" }} fluid >
         <Row className="h-100">
           <Col xs={10} md={10} className="bg-secondary text-white p-1 overflow-scroll h-100" style={{backgroundColor: "black-50"}}>
-
             <Map_Canvas
               //maptip_id = {selecting_maptip_id}
               //canvas_size = {canvas_size}
               propGetCanvasHeight={handleGetCanvasHeight}
               propGetCanvasWidth={handleGetCanvasWidth}
-              propGetMapTip={handleGetMapTip} 
+              propGetMapTip={handleGetMapTip}
               propClickCanvasTip={_handleClickCanvasTip}
               propCopyCanvasTip={_handleCopyCanvasTip}
               />
-
           </Col>
           <Col xs={2} md={2} className="text-white p-1" style={{backgroundColor: "gray"}}>
             <Add_MapTipList
               set_file_name = {(name: string) => set_file_name(mapCSVToArray(name))}
             />
-            <InputMapData
-              input_data = {handleInputMapData}
-            />
-
             <Input_canvas_size
               //size = {canvas_size}
               set_canvas_size = {_set_canvas_size}
             />
+            <Import_MapData
+              set_file_name = {(data: number[][]) => handleInputMapData(data)}
+            />
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>出力ファイル名変更</Form.Label>
+              <Form.Control type="text" value={exportFileName} placeholder="出力するファイル名を入力して下さい" onChange={handleExportNameChange}/>
+            </Form.Group>
             <Button variant="prop" onMouseDown={handleDownloadData}>出力</Button>
-            <Button variant="prop">{canvas_tip_data}</Button>
-              
           </Col>
         </Row>
       </Container>

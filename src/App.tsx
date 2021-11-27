@@ -9,6 +9,7 @@ import {Container, Row, Col, Button} from 'react-bootstrap';
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+
 let i:number;
 let j:number;
 //let pre_canvas_size: number[] = [60, 100];
@@ -36,10 +37,20 @@ const App: React.FC = () => {
   const [canvas_size, set_canvas_size] = useState<number[]>([60,100]);
   let [canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( generate2DArray(canvas_size[0], canvas_size[1]) );
   //const [selection_tool_id, set_selection_tool_id] = useState<boolean>(false);
-  
+
   console.log(canvas_size);
   
   //let temp: number[][] = generate2DArray(canvas_width_num, canvas_height_num)
+
+
+  /*
+  const handleInputMapData = (map_data : number[][])=>{
+    set_canvas_size([map_data.length,map_data[0].length])
+    set_canvas_tip_data(map_data)
+  }
+  */
+  const [exportFileName,set_exportFileName] = useState<string>("sample.csv");
+
 
   const handleGetMapTip = (h:number , w:number) => {//マップチップが選択されたときに呼び出される関数
     return canvas_tip_data[h][w]
@@ -75,6 +86,11 @@ const App: React.FC = () => {
     set_canvas_tip_data(canvas_tip_data);
   }
 
+  // 出力ファイル名を入力する度に呼ばれるやつ
+  const handleExportNameChange = (event: any) => {
+    set_exportFileName(event.target.value)
+  }
+
   // キャンバスサイズの変更
   // 入力したサイズを現在のサイズと比較して小さい方を基準にcanvas_tip_dataを再設定する
   const _set_canvas_size = (input_size: number[]) => {
@@ -103,13 +119,13 @@ const App: React.FC = () => {
     let blob = new Blob([bom, data], {type: 'text/csv'});
     let url = (window.URL || window.webkitURL).createObjectURL(blob);
     let link = document.createElement('a');
-    link.download = 'map_data.csv';
+    link.download = exportFileName;
     link.href = url;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   }
-  
+
   return(
     <div>
       <Container fluid >
@@ -136,7 +152,7 @@ const App: React.FC = () => {
               //canvas_size = {canvas_size}
               propGetCanvasHeight={handleGetCanvasHeight}
               propGetCanvasWidth={handleGetCanvasWidth}
-              propGetMapTip={handleGetMapTip} 
+              propGetMapTip={handleGetMapTip}
               propClickCanvasTip={_handleClickCanvasTip}
               propCopyCanvasTip={_handleCopyCanvasTip}
               />
@@ -152,8 +168,11 @@ const App: React.FC = () => {
             <Import_MapData
               set_file_name = {(data: number[][]) => handleInputMapData(data)}
             />
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>出力ファイル名変更</Form.Label>
+              <Form.Control type="text" value={exportFileName} placeholder="出力するファイル名を入力して下さい" onChange={handleExportNameChange}/>
+            </Form.Group>
             <Button variant="prop" onMouseDown={handleDownloadData}>出力</Button>
-            {/* <Button variant="prop">{canvas_tip_data}</Button> */}
           </Col>
         </Row>
       </Container>

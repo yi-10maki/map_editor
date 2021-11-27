@@ -19,9 +19,6 @@ function mapCSVToArray(csv: string): string[] {
   return csv.split(',');
 }
 
-// 受け取ったマップデータをnumber型の2次元配列に変換
-
-
 const generate2DArray = (m:number, n:number) => {
   return Array.from(new Array(m), _ => new Array(n).fill(-1));
 };
@@ -48,7 +45,7 @@ const App: React.FC = () => {
     set_canvas_tip_data(map_data)
   }
   */
-  const [exportFileName,set_exportFileName] = useState<string>("sample.csv");
+  const [exportFileName,set_exportFileName] = useState<string>("sample");
 
 
   const handleGetMapTip = (h:number , w:number) => {//マップチップが選択されたときに呼び出される関数
@@ -118,7 +115,11 @@ const App: React.FC = () => {
     let blob = new Blob([bom, data], {type: 'text/csv'});
     let url = (window.URL || window.webkitURL).createObjectURL(blob);
     let link = document.createElement('a');
-    link.download = exportFileName;
+    if (exportFileName == "") {
+      link.download = "map_data.csv";
+    } else {
+      link.download = exportFileName+".csv";
+    }
     link.href = url;
     document.body.appendChild(link);
     link.click();
@@ -171,7 +172,7 @@ const App: React.FC = () => {
               <Form.Label>出力ファイル名変更</Form.Label>
               <Form.Control type="text" value={exportFileName} placeholder="出力するファイル名を入力して下さい" onChange={handleExportNameChange}/>
             </Form.Group>
-            <Button variant="prop" onMouseDown={handleDownloadData}>出力</Button>
+            <Button variant="prop" onMouseDown={handleDownloadData}>マップデータ出力</Button>
           </Col>
         </Row>
       </Container>

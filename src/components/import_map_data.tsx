@@ -50,7 +50,7 @@ const Import_MapData: React.FC<Props> = (props) => {
   const handleShow = () => setShow(true);
   return (
     <>
-      <Button variant="addtip" onClick={handleShow}>マップデータ読み込み</Button>
+      <Button variant="addtip" onClick={handleShow}>マップデータ読込</Button>
       <Modal
         show={show}
         onHide={handleClose}

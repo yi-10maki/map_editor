@@ -172,7 +172,6 @@ const App: React.FC = () => {
               <Form.Control type="text" value={exportFileName} placeholder="出力するファイル名を入力して下さい" onChange={handleExportNameChange}/>
             </Form.Group>
             <Button variant="prop" onMouseDown={handleDownloadData}>出力</Button>
-
           </Col>
         </Row>
       </Container>

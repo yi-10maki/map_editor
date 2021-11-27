@@ -5,10 +5,9 @@ import Add_MapTipList from "./components/add_maptiplist";
 import Map_Canvas from "./components/map_canvas";
 import Input_canvas_size from "./components/input_canvas_size";
 import Import_MapData from "./components/import_map_data";
-import {Container, Row, Col, Button} from 'react-bootstrap';
+import {Container, Row, Col, Button, Form} from 'react-bootstrap';
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 
 let i:number;
 let j:number;
@@ -125,7 +124,7 @@ const App: React.FC = () => {
     link.click();
     document.body.removeChild(link);
   }
-
+  
   return(
     <div>
       <Container fluid >

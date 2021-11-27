@@ -4,7 +4,7 @@ import Maptip_pallet from "./components/maptip_pallet";
 import Add_MapTipList from "./components/add_maptiplist"
 import Map_Canvas from "./components/map_canvas"
 import Input_canvas_size from "./components/input_canvas_size"
-import {Container, Row, Col, Button} from 'react-bootstrap';
+import {Container, Row, Col, Button, Form} from 'react-bootstrap';
 
 let i:number;
 let j:number;
@@ -19,13 +19,6 @@ const generate2DArray = (m:number, n:number) => {
   return Array.from(new Array(m), _ => new Array(n).fill(-1));
 };
 
-const handleExportNameChange = (event) => {
-  link.download = event.target.value;
-  console.log(link.download)
-}
-
-const handleExportNameSet = () => {
-}
 
 const App: React.FC = () => {
   // AppのState これらの値を保持している
@@ -41,6 +34,8 @@ const App: React.FC = () => {
 
   let [canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( generate2DArray(canvas_size[0], canvas_size[1]) );
   //let temp: number[][] = generate2DArray(canvas_width_num, canvas_height_num)
+
+  const [exportFileName,set_exportFileName] = useState<string>("sample.csv");
 
   const handleGetMapTip = (h:number , w:number) => {//マップチップが選択されたときに呼び出される関数
     return canvas_tip_data[h][w]
@@ -71,6 +66,11 @@ const App: React.FC = () => {
     set_canvas_tip_data(canvas_tip_data);
   }
 
+  // 出力ファイル名を入力する度に呼ばれるやつ
+  const handleExportNameChange = (event: any) => {
+    set_exportFileName(event.target.value)
+  }
+
   // キャンバスサイズの変更
   // 入力したサイズを現在のサイズと比較して小さい方を基準にcanvas_tip_dataを再設定する
   const _set_canvas_size = (input_size: number[]) => {
@@ -90,6 +90,20 @@ const App: React.FC = () => {
       set_canvas_size(next_canvas_size);
       set_canvas_tip_data(temp);
     }
+  }
+
+  const handleDownloadData = () => {
+    let records: number[][] = canvas_tip_data;
+    let data = records.map((record)=>record.join(',')).join('\r\n');
+    let bom  = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    let blob = new Blob([bom, data], {type: 'text/csv'});
+    let url = (window.URL || window.webkitURL).createObjectURL(blob);
+    let link = document.createElement('a');
+    link.download = exportFileName;
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   //const _set_tool = (b: boolean) => {
@@ -138,14 +152,11 @@ const App: React.FC = () => {
               //size = {canvas_size}
               set_canvas_size = {_set_canvas_size}
             />
-
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>出力ファイル名変更</Form.Label>
-              <Form.Control type="number" placeholder="出力するファイル名を入力して下さい" onChange={handleExportNameChange}/>
+              <Form.Control type="text" value={exportFileName} placeholder="出力するファイル名を入力して下さい" onChange={handleExportNameChange}/>
             </Form.Group>
-            <Button variant="change" type="button" onClick={handleExportNameSet}>
-              決定
-            </Button>
+            <Button variant="prop" onMouseDown={handleDownloadData}>出力</Button>
             <Button variant="prop">{canvas_tip_data}</Button>
           </Col>
         </Row>

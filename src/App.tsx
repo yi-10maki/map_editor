@@ -84,6 +84,22 @@ const App: React.FC = () => {
     }
   }
 
+  const handleDownloadData = () => {
+    let records: number[][] = canvas_tip_data;
+    let data = records.map((record)=>record.join(',')).join('\r\n');
+    let bom  = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    let blob = new Blob([bom, data], {type: 'text/csv'});
+    let url = (window.URL || window.webkitURL).createObjectURL(blob);
+    let link = document.createElement('a');
+    link.download = 'map_data.csv';
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  
+
   //const _set_tool = (b: boolean) => {
   //  set_selection_tool_id(b);
   //}
@@ -130,6 +146,7 @@ const App: React.FC = () => {
               //size = {canvas_size}
               set_canvas_size = {_set_canvas_size}
             />
+            <Button variant="prop" onMouseDown={handleDownloadData}>出力</Button>
             <Button variant="prop">{canvas_tip_data}</Button>
               
           </Col>

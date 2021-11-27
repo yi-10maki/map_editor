@@ -34,6 +34,13 @@ const App: React.FC = () => {
   let [canvas_tip_data,set_canvas_tip_data] = useState<number[][]>( generate2DArray(canvas_size[0], canvas_size[1]) );
   //let temp: number[][] = generate2DArray(canvas_width_num, canvas_height_num)
 
+  /*
+  const handleInputMapData = (map_data : number[][])=>{
+    set_canvas_size([map_data.length,map_data[0].length])
+    set_canvas_tip_data(map_data)
+  }
+  */
+
   const handleGetMapTip = (h:number , w:number) => {//マップチップが選択されたときに呼び出される関数
     return canvas_tip_data[h][w]
   }
@@ -84,6 +91,22 @@ const App: React.FC = () => {
     }
   }
 
+  const handleDownloadData = () => {
+    let records: number[][] = canvas_tip_data;
+    let data = records.map((record)=>record.join(',')).join('\r\n');
+    let bom  = new Uint8Array([0xEF, 0xBB, 0xBF]);
+    let blob = new Blob([bom, data], {type: 'text/csv'});
+    let url = (window.URL || window.webkitURL).createObjectURL(blob);
+    let link = document.createElement('a');
+    link.download = 'map_data.csv';
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  
+
   //const _set_tool = (b: boolean) => {
   //  set_selection_tool_id(b);
   //}
@@ -130,6 +153,7 @@ const App: React.FC = () => {
               //size = {canvas_size}
               set_canvas_size = {_set_canvas_size}
             />
+            <Button variant="prop" onMouseDown={handleDownloadData}>出力</Button>
             <Button variant="prop">{canvas_tip_data}</Button>
               
           </Col>

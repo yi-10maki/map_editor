@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-//import { useMemo } from "react";
 import { useCallback } from "react"
 import "react-bootstrap";
 import { Button, Modal } from "react-bootstrap";
@@ -66,13 +65,6 @@ const Add_MapTipList: React.FC<Props> = (props) => {
             set_file_name = {props.set_file_name}
           />
         </Modal.Body>
-        {/*
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            閉じる
-          </Button>
-        </Modal.Footer>
-        */}
       </Modal>
     </>
   )

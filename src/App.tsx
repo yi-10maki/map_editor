@@ -11,7 +11,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 let i:number;
 let j:number;
-//let pre_canvas_size: number[] = [60, 100];
 let next_canvas_size: number[] = [60, 100];
 
 // 受け取ったマップチップリストを配列に変換
@@ -36,15 +35,7 @@ const App: React.FC = () => {
 
   console.log(canvas_size);
   
-  //let temp: number[][] = generate2DArray(canvas_width_num, canvas_height_num)
 
-
-  /*
-  const handleInputMapData = (map_data : number[][])=>{
-    set_canvas_size([map_data.length,map_data[0].length])
-    set_canvas_tip_data(map_data)
-  }
-  */
   const [exportFileName,set_exportFileName] = useState<string>("sample");
 
 
@@ -181,5 +172,3 @@ const App: React.FC = () => {
 }
 
 export default App;
-
-//tool_id={_set_tool}

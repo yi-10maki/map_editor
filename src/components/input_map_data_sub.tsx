@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+//import { useMemo } from "react";
 import { useCallback } from "react"
 import "react-bootstrap";
 import { Button, Modal } from "react-bootstrap";
@@ -7,8 +8,9 @@ import "./add_maptiplist.css"
 import { useDropzone } from "react-dropzone";
 
 type Props = {
-  set_file_name: (name: string) => void;
+  input_data: (map_data: number[][]) => void;
 }
+
 
 const Drop_MapTipList: React.FC<Props> = (props) => {
 	const onDrop = useCallback((acceptedFiles) => {
@@ -19,9 +21,11 @@ const Drop_MapTipList: React.FC<Props> = (props) => {
       reader.readAsText(file)
       reader.onload = () => {
       // Do whatever you want with the file contents
-        let result: string = reader.result as string
+        let result_text: string = reader.result as string
+        let result:number[][]=result_text.split("\r\n").map(text => text.split(",").map(s => Number(s)) )
+        result.pop()
+        props.input_data(result)
         console.log(result)
-        props.set_file_name(result)
 			}
 		})
   }, [])
@@ -41,7 +45,7 @@ const Drop_MapTipList: React.FC<Props> = (props) => {
   )
 }
 
-const Add_MapTipList: React.FC<Props> = (props) => {
+const InputMapData: React.FC<Props> = (props) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -49,7 +53,7 @@ const Add_MapTipList: React.FC<Props> = (props) => {
   return (
     <>
       <Button variant="addtip" onClick={handleShow}>
-        マップチップリストの追加
+        マップデータ読み込み
       </Button>
       <Modal
         show={show}
@@ -58,16 +62,23 @@ const Add_MapTipList: React.FC<Props> = (props) => {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>マップチップリストの追加</Modal.Title>
+          <Modal.Title>既存のマップデータを読み込みます。</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Drop_MapTipList
-            set_file_name = {props.set_file_name}
+            input_data = {props.input_data}
           />
         </Modal.Body>
+        {/*
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            閉じる
+          </Button>
+        </Modal.Footer>
+        */}
       </Modal>
     </>
   )
 }
 
-export default Add_MapTipList;
+export default InputMapData;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+//import { useMemo } from "react";
 import { useCallback } from "react"
 import "react-bootstrap";
 import { Button, Modal } from "react-bootstrap";
@@ -7,10 +8,10 @@ import "./add_maptiplist.css"
 import { useDropzone } from "react-dropzone";
 
 type Props = {
-  set_file_name: (name: string) => void;
+  set_file_name: (name: number[][]) => void;
 }
 
-const Drop_MapTipList: React.FC<Props> = (props) => {
+const Drop_MapData: React.FC<Props> = (props) => {
 	const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file: File) => {
       const reader = new FileReader()
@@ -18,8 +19,10 @@ const Drop_MapTipList: React.FC<Props> = (props) => {
       reader.onerror = () => console.log('file reading has failed')
       reader.readAsText(file)
       reader.onload = () => {
-      // Do whatever you want with the file contents
-        let result: string = reader.result as string
+        // Do whatever you want with the file contents
+        let result_text: string = reader.result as string
+        let result:number[][]=result_text.split("\r\n").map(text => text.split(",").map(s => Number(s)) )
+        result.pop()
         console.log(result)
         props.set_file_name(result)
 			}
@@ -41,16 +44,13 @@ const Drop_MapTipList: React.FC<Props> = (props) => {
   )
 }
 
-const Add_MapTipList: React.FC<Props> = (props) => {
+const Import_MapData: React.FC<Props> = (props) => {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
     <>
-      <Button variant="addtip" onClick={handleShow}>
-        マップチップリストの追加
-      </Button>
+      <Button variant="addtip" onClick={handleShow}>マップデータ読込</Button>
       <Modal
         show={show}
         onHide={handleClose}
@@ -58,10 +58,10 @@ const Add_MapTipList: React.FC<Props> = (props) => {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>マップチップリストの追加</Modal.Title>
+          <Modal.Title>マップデータ読み込み</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Drop_MapTipList
+          <Drop_MapData
             set_file_name = {props.set_file_name}
           />
         </Modal.Body>
@@ -70,4 +70,4 @@ const Add_MapTipList: React.FC<Props> = (props) => {
   )
 }
 
-export default Add_MapTipList;
+export default Import_MapData;

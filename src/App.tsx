@@ -9,19 +9,14 @@ import {Container, Row, Col, Button, Form} from 'react-bootstrap';
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-
 let i:number;
 let j:number;
-//let pre_canvas_size: number[] = [60, 100];
 let next_canvas_size: number[] = [60, 100];
 
 // 受け取ったマップチップリストを配列に変換
 function mapCSVToArray(csv: string): string[] {
   return csv.split(',');
 }
-
-// 受け取ったマップデータをnumber型の2次元配列に変換
-
 
 const generate2DArray = (m:number, n:number) => {
   return Array.from(new Array(m), _ => new Array(n).fill(-1));
@@ -40,9 +35,8 @@ const App: React.FC = () => {
 
   console.log(canvas_size);
   
-  //let temp: number[][] = generate2DArray(canvas_width_num, canvas_height_num)
 
-  const [exportFileName,set_exportFileName] = useState<string>("sample.csv");
+  const [exportFileName,set_exportFileName] = useState<string>("sample");
 
 
   const handleGetMapTip = (h:number , w:number) => {//マップチップが選択されたときに呼び出される関数
@@ -112,13 +106,17 @@ const App: React.FC = () => {
     let blob = new Blob([bom, data], {type: 'text/csv'});
     let url = (window.URL || window.webkitURL).createObjectURL(blob);
     let link = document.createElement('a');
-    link.download = exportFileName;
+    if (exportFileName == "") {
+      link.download = "map_data.csv";
+    } else {
+      link.download = exportFileName+".csv";
+    }
     link.href = url;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   }
-
+  
   return(
     <div>
       <Container fluid >
@@ -165,7 +163,7 @@ const App: React.FC = () => {
               <Form.Label>出力ファイル名変更</Form.Label>
               <Form.Control type="text" value={exportFileName} placeholder="出力するファイル名を入力して下さい" onChange={handleExportNameChange}/>
             </Form.Group>
-            <Button variant="prop" onMouseDown={handleDownloadData}>出力</Button>
+            <Button variant="prop" onMouseDown={handleDownloadData}>マップデータ出力</Button>
           </Col>
         </Row>
       </Container>
@@ -174,5 +172,3 @@ const App: React.FC = () => {
 }
 
 export default App;
-
-//tool_id={_set_tool}

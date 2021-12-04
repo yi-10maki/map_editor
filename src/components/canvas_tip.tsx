@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-/**関数名及びオブジェクト名は先頭大文字で
- * マップパチップパレット:マップチップを表示・選択する**/
-
-
 //CanvasTipのデータ
 //x,y座標
 type CanvastipProps = {
@@ -27,11 +23,9 @@ const CanvasTip: React.FC<CanvastipProps> = ({
   const [id] = useState<number>(prop_id);
   const [img_name] = useState<string>(prop_img_name);
   const [image_edge_length] = useState<string>(prop_image_edge_length);
-  //const [ selected,setSelected] = useState<boolean>(prop_selected);
 
   const handleClick = () => {
     propHandleClick(id);
-    //setSelected(true);
   };
 
   if (prop_selected) {

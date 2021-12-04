@@ -9,12 +9,6 @@ import "./map_canvas.css"
   Space+マウスホイールで拡大縮小を行える
 */}
 
-// 可変にしたい（プロパティに入力した値を受け取る）
-
-//let grid_x_num: number = 100; // default 1マス40px
-//let grid_y_num: number = 60; //
-//let canvas_size_x: number = 4000; // default 1マス40px
-//let canvas_size_y: number = 2400; //
 const maptip_edge_size: number = 40;
 let ratio: number = 1; // 拡大縮小比率
 let i: number, j: number; // for文用

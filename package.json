@@ -2,6 +2,7 @@
   "name": "map_editor",
   "version": "0.1.0",
   "private": true,
+  "serve": "vue-cli-service serve --mode production",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",

@@ -4,7 +4,7 @@
 
 概要：マップチップ（2Dゲームにおけるマップの最小単位）を読み込んでドット絵のように描くツール．マップチップに対応する数値をcsv形式で出力し，Unity側で追加機能を実装し読み込むことで，マップチップに当たるObjectを等間隔に配置するために作成．
 
-※ローカルで起動して使用する前提です．
+※制作中の2Dアクションゲームのために制作したためローカルで起動して使用する前提です．
 
 ## インストールするライブラリ
 
@@ -36,6 +36,8 @@ https://getbootstrap.jp/docs/5.0/getting-started/download/
 #### 9.react bootstrapをインストール
 npm install react-bootstrap bootstrap
 
+#### 10.(追記)動かない場合
+npm install serve してから npm run build して serve -s build して出てきた URL (localhost:3000) をブラウザに張り付けたらローカルで動かせる
 
 ## 操作説明
 ### 1.マップチップの作成・登録

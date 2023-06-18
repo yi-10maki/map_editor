@@ -12,7 +12,7 @@ type Props = {
 
 /**関数名及びオブジェクト名は先頭大文字で
  * マップパチップパレット:マップチップを表示・選択する**/
-const Maptip_pallet: React.FC<Props> = ({ img_name, set_selecting_maptip_id, }) => {
+const MaptipPallet: React.FC<Props> = ({ img_name, set_selecting_maptip_id, }) => {
 
   //const [ selecting_maptip_id, setSelectingMaptipId]=useState<number>(-1);//選んでいるマップチップの番号
   const [sel, setSel]=useState<boolean[]>(Array.from(Array(img_name.length), () => false));
@@ -24,7 +24,7 @@ const Maptip_pallet: React.FC<Props> = ({ img_name, set_selecting_maptip_id, }) 
     /*if(0<=selecting_maptip_id && selecting_maptip_id <img_names.length){
       setSel([...sel, true]);
     }*/
-    setSel(Array.from(Array(img_name.length), (v,k) => k==child_id));
+    setSel(Array.from(Array(img_name.length), (v,k) => k===child_id));
   };
 
   // selの値が更新されるかつ再レンダリングがかかったタイミングで実行
@@ -36,6 +36,7 @@ const Maptip_pallet: React.FC<Props> = ({ img_name, set_selecting_maptip_id, }) 
       if(e){
         set_selecting_maptip_id(index)
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps  
     })},[sel])
 
   return (
@@ -64,4 +65,4 @@ const Maptip_pallet: React.FC<Props> = ({ img_name, set_selecting_maptip_id, }) 
   )
 }
 
-export default Maptip_pallet;
+export default MaptipPallet;

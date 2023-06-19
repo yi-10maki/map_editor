@@ -1,10 +1,10 @@
 import React,{useState} from "react";
-import Maptip_pallet from "./components/maptip_pallet";
+import MaptipPallet from "./components/maptip_pallet";
 //import Tool_bar from "./components/tool_bar";
-import Add_MapTipList from "./components/add_maptiplist";
-import Map_Canvas from "./components/map_canvas";
-import Input_canvas_size from "./components/input_canvas_size";
-import Import_MapData from "./components/import_map_data";
+import AddMapTipList from "./components/add_maptiplist";
+import MapCanvas from "./components/map_canvas";
+import InputCanvasSize from "./components/input_canvas_size";
+import ImportMapData from "./components/import_map_data";
 import {Container, Row, Col, Button, Form} from 'react-bootstrap';
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -106,7 +106,7 @@ const App: React.FC = () => {
     let blob = new Blob([bom, data], {type: 'text/csv'});
     let url = (window.URL || window.webkitURL).createObjectURL(blob);
     let link = document.createElement('a');
-    if (exportFileName == "") {
+    if (exportFileName === "") {
       link.download = "map_data.csv";
     } else {
       link.download = exportFileName+".csv";
@@ -125,7 +125,7 @@ const App: React.FC = () => {
             <Button  variant="prop" className="w-75 h-75 bg-secondary text-white" onMouseDown={handleEraserClick}>消</Button>
           </Col>
           <Col xs={11} md={11}>
-          <Maptip_pallet
+          <MaptipPallet
             img_name = {maptip_file}
             set_selecting_maptip_id = {(maptip_id: number) => set_selecting_maptip_id(maptip_id)}
           />
@@ -138,7 +138,7 @@ const App: React.FC = () => {
       <Container style={{ height: String(window.innerHeight-80)+"px" }} fluid >
         <Row className="h-100">
           <Col xs={10} md={10} className="bg-secondary text-white p-1 overflow-scroll h-100" style={{backgroundColor: "black-50"}}>
-            <Map_Canvas
+            <MapCanvas
               //maptip_id = {selecting_maptip_id}
               //canvas_size = {canvas_size}
               propGetCanvasHeight={handleGetCanvasHeight}
@@ -149,14 +149,14 @@ const App: React.FC = () => {
               />
           </Col>
           <Col xs={2} md={2} className="text-white p-1" style={{backgroundColor: "gray"}}>
-            <Add_MapTipList
+            <AddMapTipList
               set_file_name = {(name: string) => set_file_name(mapCSVToArray(name))}
             />
-            <Input_canvas_size
+            <InputCanvasSize
               //size = {canvas_size}
               set_canvas_size = {_set_canvas_size}
             />
-            <Import_MapData
+            <ImportMapData
               set_file_name = {(data: number[][]) => handleInputMapData(data)}
             />
             <Form.Group className="mb-3" controlId="formBasicPassword">

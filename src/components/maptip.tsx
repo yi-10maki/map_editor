@@ -35,7 +35,7 @@ const Maptip: React.FC<MaptipProps> = ({
           src={`${process.env.PUBLIC_URL}/maptip/` + img_name}
           width={image_edge_length}
           height={image_edge_length}
-
+          alt={''}
         />
       </Button>
     );
@@ -46,6 +46,7 @@ const Maptip: React.FC<MaptipProps> = ({
           src={`${process.env.PUBLIC_URL}/maptip/` + img_name}
           width={image_edge_length}
           height={image_edge_length}
+          alt={''}
         />
       </Button>
     );

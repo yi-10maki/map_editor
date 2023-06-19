@@ -11,7 +11,7 @@ type Props = {
   set_file_name: (name: number[][]) => void;
 }
 
-const Drop_MapData: React.FC<Props> = (props) => {
+const DropMapData: React.FC<Props> = (props) => {
 	const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file: File) => {
       const reader = new FileReader()
@@ -27,6 +27,7 @@ const Drop_MapData: React.FC<Props> = (props) => {
         props.set_file_name(result)
 			}
 		})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -44,7 +45,7 @@ const Drop_MapData: React.FC<Props> = (props) => {
   )
 }
 
-const Import_MapData: React.FC<Props> = (props) => {
+const ImportMapData: React.FC<Props> = (props) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -61,7 +62,7 @@ const Import_MapData: React.FC<Props> = (props) => {
           <Modal.Title>マップデータ読み込み</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Drop_MapData
+          <DropMapData
             set_file_name = {props.set_file_name}
           />
         </Modal.Body>
@@ -70,4 +71,4 @@ const Import_MapData: React.FC<Props> = (props) => {
   )
 }
 
-export default Import_MapData;
+export default ImportMapData;

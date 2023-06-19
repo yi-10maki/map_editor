@@ -3,17 +3,18 @@ import React, {useEffect, useRef, useCallback, useState} from "react";
 import "./map_canvas.css"
 //import CanvasTip from "./canvas_tip";
 
-{/*
-  canvasを用いてエディタの描画部分を作成する
-  選択しているマップチップとツールによって描画を変える
-  Space+マウスホイールで拡大縮小を行える
-*/}
+/*
+canvasを用いてエディタの描画部分を作成する
+選択しているマップチップとツールによって描画を変える
+Space+マウスホイールで拡大縮小を行える
+*/
 
 const maptip_edge_size: number = 40;
 let ratio: number = 1; // 拡大縮小比率
 let i: number, j: number; // for文用
 let isDrawing: boolean = false; // マウスが左クリックされているかどうか
 let isSelecting: boolean = false; // マウスが右クリックされているかどうか
+let isSelecting_tmp: boolean = false; // 処理用
 let isMoving: boolean = false; // 選択した範囲を動かしているか
 let x: number = 0; // マウスのx座標の処理に使う
 let y: number = 0; // マウスのy座標の処理に使う
@@ -36,7 +37,7 @@ type MapCanvasProps = {
   propCopyCanvasTip: (h: number, w: number, id:number) => void;
 };
 
-const Map_Canvas: React.FC<MapCanvasProps> = ({
+const MapCanvas: React.FC<MapCanvasProps> = ({
   //maptip_id,
   propGetCanvasHeight,
   propGetCanvasWidth,  
@@ -45,7 +46,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   propCopyCanvasTip
 }) => {
   const [temp_state, set_temp_state] = useState<number>(0);
-  const [update,　setUpdata]　=　useState<boolean>(false);
+  const [update, setUpdata] = useState<boolean>(false);
   const canvasRef = useRef(null); // nullで初期化しているのでcurrentプロパティは書き換えられない
   const effectRef = useRef(null);
   const moveRef = useRef(null);
@@ -129,7 +130,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
       if(isMoving === false) { // 選択範囲の移動中でない場合
         ectx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);
         endSelect = matchGrid(e);
-        if(startSelect[0] == endSelect[0] && startSelect[1] == endSelect[1]) { // 1マス選択は無理
+        if(startSelect[0] === endSelect[0] && startSelect[1] === endSelect[1]) { // 1マス選択は無理
           isSelecting = false;
           selectArea = [0, 0, 0, 0]; // selectAreaを初期化
         } else { // 選択した範囲を取得し、その範囲を表示する
@@ -140,7 +141,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
           ectx.fillRect(selectArea[0]*now_maptip_edge_size, selectArea[1]*now_maptip_edge_size, selectArea[2]*now_maptip_edge_size, selectArea[3]*now_maptip_edge_size);
         }
       } else if(isMoving === true){ // 選択範囲の移動中
-        if(areaMove[0] != 0 || areaMove[1] != 0) { // 移動距離が0でないときのみ移動を行う
+        if(areaMove[0] !== 0 || areaMove[1] !== 0) { // 移動距離が0でないときのみ移動を行う
           ectx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);
           let selectAreaTips: number[][] = generate2DArray(selectArea[2], selectArea[3]); // 範囲選択した部分のマップチップデータ
           for(i = 0; i < selectArea[2]; i++) {
@@ -192,7 +193,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     return [x, y]
   }
 
-　// マウスの移動中に呼び出される関数
+  // マウスの移動中に呼び出される関数
   function handleMouseMove(e:any) {
     if(isDrawing) { // 描画中（左クリック中）
       let rect: any = e.target.getBoundingClientRect();
@@ -210,7 +211,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     } else if(isMoving) { // 選択範囲の移動中（右クリック中）
       const mctx: CanvasRenderingContext2D = getMoveContext();
       mctx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);
-    　// マス目に合わせる処理
+      // マス目に合わせる処理
       let rect: any = e.target.getBoundingClientRect();
       x = e.clientX - rect.left;
       y = e.clientY - rect.top;
@@ -234,7 +235,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   // クリックされた部分の描画
   function drawMapTip(cx:number, cy:number) {
     const ctx: CanvasRenderingContext2D = getContext();
-    if (propGetMapTip(Math.floor(cy/now_maptip_edge_size), Math.floor(cx/now_maptip_edge_size)) == -1) {
+    if (propGetMapTip(Math.floor(cy/now_maptip_edge_size), Math.floor(cx/now_maptip_edge_size)) === -1) {
       ctx.clearRect(cx, cy, now_maptip_edge_size, now_maptip_edge_size);
       ctx.beginPath();
       ctx.strokeStyle = 'black';
@@ -284,7 +285,8 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   // 副作用をReactのrenderフェーズで行うとバグとか非整合が起こるのでこれ使う
   // 呼ばれるタイミングはuseStateが変更された時、宣言されたときなど
   useEffect(() => {
-    isSelecting =  isSelecting;
+    isSelecting_tmp = isSelecting;
+    isSelecting = isSelecting_tmp;
     now_canvas_size[0] = propGetCanvasHeight();
     now_canvas_size[1] = propGetCanvasWidth();
     document.addEventListener("keydown", enterFunction, false);
@@ -294,7 +296,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
     for (i = 0; i < propGetCanvasWidth(); i++) {
       // y 方向に描画する
       for (j = 0; j < propGetCanvasHeight(); j++) {
-        if (propGetMapTip(j, i) == -1) {
+        if (propGetMapTip(j, i) === -1) {
           ctx.beginPath();
           ctx.strokeStyle = 'black';
           ctx.strokeRect(i*now_maptip_edge_size, j*now_maptip_edge_size, now_maptip_edge_size, now_maptip_edge_size);
@@ -309,7 +311,7 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
 
     const ectx: CanvasRenderingContext2D = getEffectContext(); 
     ectx.clearRect(0, 0, propGetCanvasWidth()*maptip_edge_size, propGetCanvasHeight()*maptip_edge_size);
-    if(isSelecting == true) { 
+    if(isSelecting === true) { 
       ectx.strokeStyle = 'red';
       ectx.fillStyle = "rgba(" + [200, 0, 0, 0.1] + ")";
       ectx.strokeRect(selectArea[0]*now_maptip_edge_size, selectArea[1]*now_maptip_edge_size, selectArea[2]*now_maptip_edge_size, selectArea[3]*now_maptip_edge_size);
@@ -362,4 +364,4 @@ const Map_Canvas: React.FC<MapCanvasProps> = ({
   );
 }
 
-export default Map_Canvas;
+export default MapCanvas;

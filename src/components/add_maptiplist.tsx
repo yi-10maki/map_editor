@@ -10,7 +10,7 @@ type Props = {
   set_file_name: (name: string) => void;
 }
 
-const Drop_MapTipList: React.FC<Props> = (props) => {
+const DropMapTipList: React.FC<Props> = (props) => {
 	const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file: File) => {
       const reader = new FileReader()
@@ -24,6 +24,7 @@ const Drop_MapTipList: React.FC<Props> = (props) => {
         props.set_file_name(result)
 			}
 		})
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 
@@ -41,7 +42,7 @@ const Drop_MapTipList: React.FC<Props> = (props) => {
   )
 }
 
-const Add_MapTipList: React.FC<Props> = (props) => {
+const AddMapTipList: React.FC<Props> = (props) => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -61,7 +62,7 @@ const Add_MapTipList: React.FC<Props> = (props) => {
           <Modal.Title>マップチップリストの追加</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Drop_MapTipList
+          <DropMapTipList
             set_file_name = {props.set_file_name}
           />
         </Modal.Body>
@@ -70,4 +71,4 @@ const Add_MapTipList: React.FC<Props> = (props) => {
   )
 }
 
-export default Add_MapTipList;
+export default AddMapTipList;
